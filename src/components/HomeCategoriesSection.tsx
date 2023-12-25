@@ -1,4 +1,5 @@
 import { Box, Link, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { Meme } from "../data/memes";
 import MemeList from "./MemeList";
 
@@ -10,6 +11,7 @@ function HomeCategoriesSection({
   seeMoreUrl?: string;
   memeList: Meme[];
 }) {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -31,7 +33,7 @@ function HomeCategoriesSection({
           variant="body1"
           underline="hover"
           onClick={() => {
-            alert("WIP");
+            navigate("/search?query=");
           }}
         >
           See More
