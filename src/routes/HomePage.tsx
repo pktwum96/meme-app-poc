@@ -15,7 +15,7 @@ function HomePage() {
         />
         <HomeCategoriesSection
           sectionTitle={"Most Popular"}
-          memeList={memeDatabase}
+          memeList={[...memeDatabase].reverse()}
         />
       </Container>
     </Container>
