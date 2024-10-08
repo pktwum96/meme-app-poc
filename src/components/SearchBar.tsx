@@ -6,7 +6,6 @@ import { ChangeEvent, ChangeEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function SearchBar({
-  rounded = true,
   value,
   setValue,
   onSubmit,
@@ -17,6 +16,7 @@ export default function SearchBar({
   onSubmit?: () => void;
 }) {
   const [searchQuery, setSearchQuery] = useState("");
+
   const navigate = useNavigate();
   const onClickSubmit = () => {
     navigate(`/search?query=${searchQuery}`);
@@ -35,7 +35,7 @@ export default function SearchBar({
       defaultValue={value}
       value={value}
       options={[]}
-      sx={{ flex: 1 }}
+      sx={{ flex: 1, flexGrow: 1 }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -47,8 +47,6 @@ export default function SearchBar({
             ...params.InputProps,
             type: "search",
             style: {
-              borderRadius: rounded ? "200px" : undefined,
-              backgroundColor: "white",
               width: "100%",
             },
             endAdornment: (

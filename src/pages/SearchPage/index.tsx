@@ -11,12 +11,12 @@ import {
 import Container from "@mui/material/Container";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../../components/SearchBar";
 
-import MemeList from "../components/MemeList";
-import { memeDatabase } from "../data/memes";
+import MemeList from "../../components/MemeList";
+import { memeDatabase } from "../../data/memes";
 
-function SearchPage() {
+export const SearchPage = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -60,7 +60,7 @@ function SearchPage() {
   };
 
   return (
-    <Container sx={{ paddingY: 2 }}>
+    <Container maxWidth="xl" sx={{ paddingY: 4 }}>
       <Box display={"flex"}>
         <SearchBar
           rounded={false}
@@ -119,6 +119,4 @@ function SearchPage() {
       </Box>
     </Container>
   );
-}
-
-export default SearchPage;
+};

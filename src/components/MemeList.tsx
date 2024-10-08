@@ -7,12 +7,11 @@ function MemeList({ memes }: { memes: Meme[] }) {
     <Grid
       container
       direction={{ xs: "column", sm: "row" }}
-      spacing={{ xs: 4, sm: 2, md: 4 }}
-      columns={{ xs: 4, sm: 8, md: 12 }}
+      spacing={{ xs: 1, sm: 1, md: 3 }}
       flexWrap="wrap"
     >
       {memes.map((meme, index) => (
-        <Grid xs={2} sm={4} md={4} item key={index + meme.id}>
+        <Grid xs={2} sm={4} md={2} lg={1} item key={index + meme.id}>
           <MemeCard {...meme} />
         </Grid>
       ))}
