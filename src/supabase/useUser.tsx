@@ -5,6 +5,7 @@ import {
 } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useFullScreenLoading } from "../contexts/loading";
 import { getUserDetails, getUserPreferences } from "../queries/users";
 import { UserDetails, UserPreferences } from "./types";
 
@@ -39,6 +40,8 @@ export const UserProvider = (props: Props) => {
   const accessToken = session?.access_token ?? null;
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+
+  const { setIsLoading } = useFullScreenLoading();
   const [userPreferences, setUserPreferences] =
     useState<UserPreferences | null>(null);
 
@@ -75,7 +78,7 @@ export const UserProvider = (props: Props) => {
     const fetchUserDetails = async () => {
       if (user && !isLoadingData && !userDetails && !hasError) {
         setIsLoadingData(true);
-
+        setIsLoading(true);
         const [details, preferences] = await Promise.all([
           getUserDetailsFromDatabase(),
           getUserPreferencesFromDatabase(),
@@ -85,6 +88,7 @@ export const UserProvider = (props: Props) => {
         if (preferences) setUserPreferences(preferences);
 
         setIsLoadingData(false);
+        setIsLoading(false);
       }
     };
 

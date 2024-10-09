@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { ContainedButton } from "../../components/ContainedButton";
 import FileUploadArea from "../../components/FileUploadArea";
 import Text from "../../components/Text";
+import { useFullScreenLoading } from "../../contexts/loading";
 import {
   createMemeInDatabase,
   uploadMemeToSupabase,
@@ -19,6 +20,7 @@ export const UploadMemePage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const { setIsLoading } = useFullScreenLoading();
   const { user } = useUser();
 
   const { supabaseClient: supabase } = useSessionContext();
@@ -29,7 +31,7 @@ export const UploadMemePage = () => {
     if (!selectedFile || !title) {
       return;
     }
-
+    setIsLoading(true);
     try {
       // Upload file to Supabase storage
       const fileExt = selectedFile.name.split(".").pop();
@@ -65,6 +67,7 @@ export const UploadMemePage = () => {
         throw dbError;
       }
 
+      setIsLoading(false);
       toast("Meme uploaded successfully!");
       setSelectedFile(null);
       setTitle("");
@@ -72,6 +75,7 @@ export const UploadMemePage = () => {
     } catch (error) {
       toast((error as any).message);
     }
+    setIsLoading(false);
   };
   return (
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>

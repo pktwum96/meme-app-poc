@@ -2,6 +2,7 @@ import "./App.css";
 
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter } from "react-router-dom";
+import { LoadingProvider } from "./contexts/loading";
 import { ThemeProvider } from "./contexts/theme";
 import ToasterProvider from "./contexts/toast";
 import { Root } from "./routes/Root";
@@ -12,14 +13,16 @@ const App = () => {
   return (
     <ThemeProvider>
       <CssBaseline />
-      <SupabaseProvider>
-        <UserProvider>
-          <BrowserRouter>
-            <ToasterProvider />
-            <Root />
-          </BrowserRouter>
-        </UserProvider>
-      </SupabaseProvider>
+      <LoadingProvider>
+        <SupabaseProvider>
+          <UserProvider>
+            <BrowserRouter>
+              <ToasterProvider />
+              <Root />
+            </BrowserRouter>
+          </UserProvider>
+        </SupabaseProvider>
+      </LoadingProvider>
     </ThemeProvider>
   );
 };
