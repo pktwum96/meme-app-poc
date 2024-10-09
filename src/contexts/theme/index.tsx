@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { darkTheme } from "./dark-theme";
 
-export interface ThemeContextProps {
+interface ThemeContextProps {
   theme: Theme;
   setTheme: Dispatch<SetStateAction<Theme>>;
 }
@@ -19,7 +19,7 @@ const defaultContext = {
 
 const ThemeContext = React.createContext<ThemeContextProps>(defaultContext);
 
-export interface ThemeProviderProps extends PropsWithChildren {
+interface ThemeProviderProps extends PropsWithChildren {
   theme?: Theme;
 }
 export const useTheme = () => {

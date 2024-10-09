@@ -23,7 +23,7 @@ const UserContext = createContext<UserContextType>({
   isLoading: false,
 });
 
-export interface Props {
+interface Props {
   [propName: string]: any;
 }
 
@@ -38,19 +38,14 @@ export const UserProvider = (props: Props) => {
   const accessToken = session?.access_token ?? null;
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
-  const [
-    userPreferences,
-    setUserPreferences,
-  ] = useState<UserPreferences | null>(null);
+  const [userPreferences, setUserPreferences] =
+    useState<UserPreferences | null>(null);
 
   const [hasError, setHasError] = useState(false); // Track error state
 
   const getUserDetails = async () => {
     try {
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .single();
+      const { data, error } = await supabase.from("users").select("*").single();
 
       if (error) throw error; // Throw error to be caught below
 
