@@ -1,6 +1,7 @@
 import { Box, Link, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Meme } from "../data/memes";
+
+import { Meme } from "../supabase/types";
 import MemeList from "./MemeList";
 
 function HomeCategoriesSection({

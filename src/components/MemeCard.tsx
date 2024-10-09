@@ -8,7 +8,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { Meme } from "../data/memes";
+import { Meme } from "../supabase/types";
 import VideoPreviewer from "./VideoPreviewer";
 
 function MemeCard(meme: Meme) {
@@ -19,10 +19,10 @@ function MemeCard(meme: Meme) {
       }}
     >
       <Box position={"relative"} maxHeight={"285px"}>
-        {meme.type === "video" ? (
-          <VideoPreviewer url={meme.url} />
+        {meme.media_type?.includes("video") ? (
+          <VideoPreviewer url={meme.media_url} />
         ) : (
-          <CardMedia src={meme.url} />
+          <CardMedia src={meme.media_url} />
         )}
         <CardActions sx={{ position: "absolute", top: 0, right: "0.5rem" }}>
           <IconButton sx={{ color: "white" }} aria-label="share">

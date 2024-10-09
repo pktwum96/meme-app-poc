@@ -7,7 +7,7 @@ export default function SupaBaseApp() {
     <Auth
       supabaseClient={client}
       socialLayout="horizontal"
-      providers={["google", "facebook", "twitter", "apple"]}
+      providers={["google"]}
       appearance={{ theme: ThemeSupa }}
       theme="dark"
     />

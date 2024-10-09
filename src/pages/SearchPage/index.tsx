@@ -14,7 +14,6 @@ import { useSearchParams } from "react-router-dom";
 import SearchBar from "../../components/SearchBar";
 
 import MemeList from "../../components/MemeList";
-import { memeDatabase } from "../../data/memes";
 
 export const SearchPage = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -24,10 +23,10 @@ export const SearchPage = () => {
   const [mediaTypes, setMediaTypes] = useState<string[]>(
     (searchParams.get("mediaTypes") || "video,gif,image").split(",")
   );
-  const [memes, setMemes] = useState(memeDatabase);
+  const [memes, setMemes] = useState([]);
 
   useEffect(() => {
-    const filteredMemes = memeDatabase.filter((item) => {
+    const filteredMemes = [].filter((item: any) => {
       return (
         (item.title.toLowerCase().includes(query.toLowerCase()) ||
           item.description.toLowerCase().includes(query.toLowerCase())) &&

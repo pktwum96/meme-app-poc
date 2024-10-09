@@ -4,6 +4,7 @@ import { WrappedNavbar } from "../components/WrappedNavbar";
 import { ErrorPage } from "../pages/ErrorPage";
 import { HomePage } from "../pages/Home";
 import { Login } from "../pages/Login";
+import { MyMemes } from "../pages/MyMemes";
 import { SearchPage } from "../pages/SearchPage";
 import { UploadMemePage } from "../pages/UploadMemePage";
 
@@ -20,6 +21,7 @@ export const Root = () => {
           <Route path="/search" element={<SearchPage />} />
           <Route element={<RequireAuth />}>
             <Route path="/upload" element={<UploadMemePage />} />
+            <Route path="/my-memes" element={<MyMemes />} />
           </Route>
         </Route>
 

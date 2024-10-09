@@ -91,7 +91,14 @@ function NavBar() {
 
             {userDetails ? (
               <>
-                <Button sx={{ color: "inherit" }}>My memes</Button>
+                <Button
+                  sx={{ color: "inherit" }}
+                  onClick={() => {
+                    navigate("/my-memes");
+                  }}
+                >
+                  My memes
+                </Button>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar

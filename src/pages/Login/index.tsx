@@ -27,7 +27,7 @@ export const Login = () => {
         sx={{
           display: {
             xs: "none", // Will be hidden on small screens (xs and up)
-            md: "block", // Will be shown on medium screens (md and up)
+            // md: "block", // Will be shown on medium screens (md and up)
           },
           padding: 2,
         }}
@@ -37,7 +37,7 @@ export const Login = () => {
         sx={{
           display: {
             xs: "none", // Will be hidden on small screens (xs and up)
-            md: "block", // Will be shown on medium screens (md and up)
+            // md: "block", // Will be shown on medium screens (md and up)
           },
         }}
       >

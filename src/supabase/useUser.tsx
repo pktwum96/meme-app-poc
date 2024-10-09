@@ -5,6 +5,7 @@ import {
 } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { getUserDetails, getUserPreferences } from "../queries/users";
 import { UserDetails, UserPreferences } from "./types";
 
 type UserContextType = {
@@ -43,28 +44,25 @@ export const UserProvider = (props: Props) => {
 
   const [hasError, setHasError] = useState(false); // Track error state
 
-  const getUserDetails = async () => {
-    try {
-      const { data, error } = await supabase.from("users").select("*").single();
+  const getUserDetailsFromDatabase = async () => {
+    if (user) {
+      try {
+        const { data, error } = await getUserDetails(supabase, user?.id);
 
-      if (error) throw error; // Throw error to be caught below
+        if (error) throw error;
 
-      return data as UserDetails;
-    } catch (error) {
-      toast.error("Error fetching user details:", (error as any).message);
-      setHasError(true); // Set error flag
-      return null;
-    }
+        return data as UserDetails;
+      } catch (error) {
+        toast.error("Error fetching user details:", (error as any).message);
+        setHasError(true); // Set error flag
+        return null;
+      }
+    } else return null;
   };
 
-  const getUserPreferences = async () => {
+  const getUserPreferencesFromDatabase = async () => {
     if (user) {
-      const { data, error } = await supabase
-        .from("user_preferences")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
+      const { data, error } = await getUserPreferences(supabase, user.id);
       if (error) {
         return null;
       }
@@ -73,15 +71,14 @@ export const UserProvider = (props: Props) => {
       return null;
     }
   };
-
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (user && !isLoadingData && !userDetails && !hasError) {
         setIsLoadingData(true);
 
         const [details, preferences] = await Promise.all([
-          getUserDetails(),
-          getUserPreferences(),
+          getUserDetailsFromDatabase(),
+          getUserPreferencesFromDatabase(),
         ]);
 
         if (details) setUserDetails(details);

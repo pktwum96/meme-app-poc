@@ -8,6 +8,11 @@ import toast from "react-hot-toast";
 import { ContainedButton } from "../../components/ContainedButton";
 import FileUploadArea from "../../components/FileUploadArea";
 import Text from "../../components/Text";
+import {
+  createMemeInDatabase,
+  uploadMemeToSupabase,
+} from "../../queries/memes";
+import { Meme } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
 export const UploadMemePage = () => {
@@ -30,9 +35,11 @@ export const UploadMemePage = () => {
       const fileExt = selectedFile.name.split(".").pop();
       const fileName = `${Date.now()}.${fileExt}`;
       const filePath = `public/${fileName}`;
-      const { error } = await supabase.storage
-        .from("Meme_Bucket") // 'memes' is your storage bucket name
-        .upload(filePath, selectedFile);
+      const { error } = await uploadMemeToSupabase(
+        supabase,
+        selectedFile,
+        filePath
+      );
 
       if (error) {
         throw error;
@@ -42,18 +49,19 @@ export const UploadMemePage = () => {
         .getPublicUrl(filePath).data.publicUrl;
 
       // Insert meme data into the memes table
-      const { error: dbError } = await supabase.from("memes").insert({
+
+      const meme = {
         title,
         description,
         media_url: mediaUrl, // Full public URL for frontend use
         media_path: filePath,
         media_type: selectedFile.type,
-        created_by: user?.id, // Assumes user is authenticated
-        status: "draft", // Default status
-      });
+        created_by: user!.id, // Assumes user is authenticated
+        status: "draft" as Meme["status"], // Default status
+      };
+      const { error: dbError } = await createMemeInDatabase(supabase, meme);
 
       if (dbError) {
-        console.log(dbError);
         throw dbError;
       }
 
@@ -93,9 +101,9 @@ export const UploadMemePage = () => {
           />
 
           <Stack spacing={2} direction={"row"} width={"100%"}>
-            <TextField label="Tags" />
+            <TextField label="Tags" sx={{ flex: 1 }} />
 
-            <TextField label="Tags" />
+            <TextField label="Tags" sx={{ flex: 1 }} />
           </Stack>
           <ContainedButton size="large" type="submit">
             Upload Meme
