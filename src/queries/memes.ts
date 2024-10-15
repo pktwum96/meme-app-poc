@@ -6,6 +6,13 @@ export const getAllMemes = (client: SupabaseClient<Database>) => {
   return client.from("memes").select("*").eq("status", "published");
 };
 
+export const getMemeById = (
+  client: SupabaseClient<Database>,
+  memeId: string
+) => {
+  return client.from("memes").select("*").eq("id", memeId).single();
+};
+
 export const getAllMyMemes = (
   client: SupabaseClient<Database>,
   userId: string
@@ -27,5 +34,5 @@ export const createMemeInDatabase = (
   client: SupabaseClient<Database>,
   meme: MemeInsert
 ) => {
-  return client.from("memes").insert(meme);
+  return client.from("memes").insert(meme).select("*").single();
 };

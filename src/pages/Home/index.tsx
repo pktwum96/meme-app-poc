@@ -39,7 +39,7 @@ export const HomePage = () => {
         <SearchBar />
         <ContainedButton
           sx={{ marginLeft: 2 }}
-          onClick={() => navigate("/upload")}
+          onClick={() => navigate("/meme/create")}
         >
           Upload Meme
         </ContainedButton>

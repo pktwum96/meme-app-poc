@@ -1,14 +1,13 @@
 import { Skeleton } from "@mui/material";
-import Typography, { TypographyProps } from "@mui/material/Typography";
+import { TypographyProps } from "@mui/material/Typography";
+import Text from "./Text";
 
 const LoadingText = ({
   loading,
   children,
   ...props
 }: TypographyProps & { loading: boolean }) => {
-  return (
-    <Typography {...props}>{loading ? <Skeleton /> : children}</Typography>
-  );
+  return <Text {...props}>{loading ? <Skeleton /> : children}</Text>;
 };
 
 export default LoadingText;

@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { ContainedButton } from "../../components/ContainedButton";
 import FileUploadArea from "../../components/FileUploadArea";
 import Text from "../../components/Text";
@@ -16,10 +17,11 @@ import {
 import { Meme } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
-export const UploadMemePage = () => {
+export const CreatePage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const navigate = useNavigate();
   const { setIsLoading } = useFullScreenLoading();
   const { user } = useUser();
 
@@ -61,7 +63,10 @@ export const UploadMemePage = () => {
         created_by: user!.id, // Assumes user is authenticated
         status: "draft" as Meme["status"], // Default status
       };
-      const { error: dbError } = await createMemeInDatabase(supabase, meme);
+      const { data, error: dbError } = await createMemeInDatabase(
+        supabase,
+        meme
+      );
 
       if (dbError) {
         throw dbError;
@@ -72,6 +77,9 @@ export const UploadMemePage = () => {
       setSelectedFile(null);
       setTitle("");
       setDescription("");
+      if (data) {
+        navigate(`/meme/${data.id}`, { state: { meme: data } });
+      }
     } catch (error) {
       toast((error as any).message);
     }
@@ -110,7 +118,7 @@ export const UploadMemePage = () => {
             <TextField label="Tags" sx={{ flex: 1 }} />
           </Stack>
           <ContainedButton size="large" type="submit">
-            Upload Meme
+            Save
           </ContainedButton>
         </Stack>
       </Box>

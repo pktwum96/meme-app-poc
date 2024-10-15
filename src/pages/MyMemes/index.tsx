@@ -1,11 +1,14 @@
 import Container from "@mui/material/Container";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import MemeList from "../../components/MemeList";
 import { getAllMyMemes } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
+
+import { capitalize, groupBy } from "lodash";
+import Text from "../../components/Text";
 
 export const MyMemes = () => {
   const [memeList, setMemeList] = useState<Meme[]>([]);
@@ -33,9 +36,18 @@ export const MyMemes = () => {
     };
     fetchMemes();
   }, [userId]);
+
+  const arrangedMemes = groupBy(memeList, ({ status }) => status);
   return (
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
-      <MemeList memes={memeList} />
+      {Object.keys(arrangedMemes).map((memeStatus) => {
+        return (
+          <Fragment key={memeStatus}>
+            <Text variant="h6">{capitalize(memeStatus)}</Text>
+            <MemeList memes={arrangedMemes[memeStatus] as any} />
+          </Fragment>
+        );
+      })}
     </Container>
   );
 };

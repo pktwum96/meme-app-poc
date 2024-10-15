@@ -8,8 +8,10 @@ export const ContainedButton = (props: ButtonProps) => {
       {...props}
       variant="contained"
       sx={{
-        color: theme.palette.background.paper,
-        background: theme.palette.text.primary,
+        color:
+          props.color === "error" ? undefined : theme.palette.background.paper,
+        background:
+          props.color === "error" ? undefined : theme.palette.text.primary,
         ...props.sx,
       }}
     />
