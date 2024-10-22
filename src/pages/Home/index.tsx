@@ -28,7 +28,7 @@ export const HomePage = () => {
           setMemeList(data);
         }
       } catch (error) {
-        toast((error as any).message);
+        toast.error((error as any).message);
       }
     };
     fetchMemes();

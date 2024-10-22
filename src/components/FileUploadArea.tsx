@@ -55,6 +55,7 @@ const FileUploadArea = ({
         cursor: "pointer",
         transition: "border-color 0.3s ease",
       }}
+      data-testid="file-input"
     >
       <input
         id="fileInput"

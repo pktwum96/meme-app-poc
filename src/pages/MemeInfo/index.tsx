@@ -40,7 +40,7 @@ export const MemeInfoPage = () => {
         }
       } catch (error) {
         setIsLoading(false);
-        toast((error as any).message);
+        toast.error((error as any).message);
       }
     };
     fetchMeme();

@@ -30,7 +30,7 @@ export const MyMemes = () => {
             setMemeList(data);
           }
         } catch (error) {
-          toast((error as any).message);
+          toast.error((error as any).message);
         }
       }
     };

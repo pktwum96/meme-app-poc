@@ -73,7 +73,7 @@ export const CreatePage = () => {
       }
 
       setIsLoading(false);
-      toast("Meme uploaded successfully!");
+      toast.success("Meme uploaded successfully!");
       setSelectedFile(null);
       setTitle("");
       setDescription("");
@@ -81,7 +81,7 @@ export const CreatePage = () => {
         navigate(`/meme/${data.id}`, { state: { meme: data } });
       }
     } catch (error) {
-      toast((error as any).message);
+      toast.error((error as any).message);
     }
     setIsLoading(false);
   };
@@ -90,7 +90,7 @@ export const CreatePage = () => {
       <Text variant="h3" textAlign={"center"}>
         Upload your meme
       </Text>
-      <Box component="form" paddingTop={2} onSubmit={handleSubmit}>
+      <Box role="form" component="form" paddingTop={2} onSubmit={handleSubmit}>
         <Stack spacing={2}>
           <FileUploadArea {...{ selectedFile, setSelectedFile }} />
           <TextField
