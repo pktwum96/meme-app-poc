@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useParams } from "react-router-dom";
 import { ContainedButton } from "../../components/ContainedButton";
-import LoadingText from "../../components/LoadingText";
 import { MediaRenderer } from "../../components/MediaRenderer";
 import { ResponsiveIconButton } from "../../components/ResponsiveIconButton";
+import Text from "../../components/Text";
+import { useFullScreenLoading } from "../../contexts/loading";
 import { getMemeById } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
@@ -27,6 +28,7 @@ export const MemeInfoPage = () => {
 
   useEffect(() => {
     const fetchMeme = async () => {
+      setIsLoading(true);
       try {
         if (!meme && memeId) {
           const { data, error } = await getMemeById(supabaseClient, memeId);
@@ -37,18 +39,25 @@ export const MemeInfoPage = () => {
           setMeme(data);
         }
       } catch (error) {
+        setIsLoading(false);
         toast((error as any).message);
       }
     };
     fetchMeme();
+    setIsLoading(false);
   }, [memeId]);
 
-  const isLoading = !meme;
+  const isCreatedByUser = meme?.created_by === userDetails?.id;
+
+  const { setIsLoading } = useFullScreenLoading();
+  if (!meme) {
+    return "Meme not found";
+  }
   return (
     <Container>
-      {meme?.created_by === userDetails?.id ? (
+      {isCreatedByUser ? (
         <Stack direction="row" paddingY={1} alignItems={"center"}>
-          <Chip label={meme?.status.toLocaleUpperCase()} size="small" />
+          <Chip label={meme.status.toLocaleUpperCase()} size="small" />
           <Stack direction="row" spacing={1} marginLeft={"auto"}>
             <ResponsiveIconButton
               label={"Delete"}
@@ -60,18 +69,18 @@ export const MemeInfoPage = () => {
           </Stack>
         </Stack>
       ) : null}
-      <LoadingText loading={isLoading} variant="h5">
-        {meme?.title}
-      </LoadingText>
+      <Text variant="h5">{meme?.title}</Text>
 
-      <MediaRenderer type={meme?.media_type!} src={meme?.media_url!} />
-      <LoadingText loading={isLoading} variant="body1">
-        {meme?.description}
-      </LoadingText>
+      <MediaRenderer type={meme.media_type!} src={meme.media_url!} />
+      <Text variant="body1">{meme?.description}</Text>
 
-      <Box>
-        <ContainedButton>Submit for review</ContainedButton>
-      </Box>
+      {isCreatedByUser && meme.status === "draft" ? (
+        <Box padding={2} display={"flex"}>
+          <ContainedButton sx={{ marginLeft: "auto" }}>
+            Submit for review
+          </ContainedButton>
+        </Box>
+      ) : null}
     </Container>
   );
 };

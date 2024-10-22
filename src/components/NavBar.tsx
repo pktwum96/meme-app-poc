@@ -49,7 +49,6 @@ function NavBar() {
   ];
 
   const { userDetails } = useUser();
-
   return (
     <AppBar position="static" color={"transparent"}>
       <Container maxWidth="xl">
@@ -102,8 +101,12 @@ function NavBar() {
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      alt={userDetails.full_name || undefined}
-                      src={userDetails.avatar_url || undefined}
+                      alt={
+                        userDetails.full_name ||
+                        userDetails.username ||
+                        undefined
+                      }
+                      src={userDetails.avatar_url || ""}
                     />
                   </IconButton>
                 </Tooltip>
