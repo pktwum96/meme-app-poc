@@ -1,11 +1,12 @@
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { client } from "../../supabase/SupabaseProvider";
 
 export default function SupaBaseApp() {
+  const { supabaseClient } = useSessionContext();
   return (
     <Auth
-      supabaseClient={client}
+      supabaseClient={supabaseClient}
       socialLayout="horizontal"
       providers={["google"]}
       appearance={{ theme: ThemeSupa }}

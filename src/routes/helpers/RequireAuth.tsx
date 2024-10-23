@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useUser } from "../../supabase/useUser";
+import { useUser } from "../../supabase/user-provider";
 
 export const RequireAuth = () => {
   const { user, isLoading } = useUser();

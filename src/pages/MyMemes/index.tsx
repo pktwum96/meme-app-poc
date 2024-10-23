@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import MemeList from "../../components/MemeList";
 import { getAllMyMemes } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
-import { useUser } from "../../supabase/useUser";
+import { useUser } from "../../supabase/user-provider";
 
 import { capitalize, groupBy } from "lodash";
 import Text from "../../components/Text";
@@ -30,12 +30,12 @@ export const MyMemes = () => {
             setMemeList(data);
           }
         } catch (error) {
-          toast.error((error as any).message);
+          toast.error((error as Error).message);
         }
       }
     };
     fetchMemes();
-  }, [userId]);
+  }, [userId, supabaseClient]);
 
   const arrangedMemes = groupBy(memeList, ({ status }) => status);
   return (
@@ -44,7 +44,7 @@ export const MyMemes = () => {
         return (
           <Fragment key={memeStatus}>
             <Text variant="h6">{capitalize(memeStatus)}</Text>
-            <MemeList memes={arrangedMemes[memeStatus] as any} />
+            <MemeList memes={arrangedMemes[memeStatus]} />
           </Fragment>
         );
       })}

@@ -5,7 +5,7 @@ const FileUploadArea = ({
   setSelectedFile,
 }: {
   selectedFile: File | null;
-  setSelectedFile: Dispatch<any>;
+  setSelectedFile: Dispatch<File>;
 }) => {
   const [dragActive, setDragActive] = useState(false);
 

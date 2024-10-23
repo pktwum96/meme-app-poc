@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import { alpha } from "@mui/material/styles";
 import CircleLoader from "react-spinners/CircleLoader";
-import { useTheme } from "../contexts/theme";
+import { useTheme } from "../contexts/theme/theme-provider";
 
 export const FullScreenLoading = () => {
   const { theme } = useTheme();

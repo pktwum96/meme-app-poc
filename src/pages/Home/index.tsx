@@ -28,11 +28,11 @@ export const HomePage = () => {
           setMemeList(data);
         }
       } catch (error) {
-        toast.error((error as any).message);
+        toast.error((error as Error).message);
       }
     };
     fetchMemes();
-  }, []);
+  }, [supabaseClient]);
   return (
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
       <Box display={"flex"}>

@@ -7,7 +7,7 @@ interface SupabaseProviderProps {
   children: ReactNode;
 }
 
-export const client = createClient<Database>(
+const client = createClient<Database>(
   import.meta.env.VITE_SUPABASE_URL || "fsda",
   import.meta.env.VITE_SUPABASE_KEY || "fasdf"
 );

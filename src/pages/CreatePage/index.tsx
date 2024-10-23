@@ -15,7 +15,7 @@ import {
   uploadMemeToSupabase,
 } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
-import { useUser } from "../../supabase/useUser";
+import { useUser } from "../../supabase/user-provider";
 
 export const CreatePage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -81,7 +81,7 @@ export const CreatePage = () => {
         navigate(`/meme/${data.id}`, { state: { meme: data } });
       }
     } catch (error) {
-      toast.error((error as any).message);
+      toast.error((error as Error).message);
     }
     setIsLoading(false);
   };

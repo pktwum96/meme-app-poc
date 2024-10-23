@@ -9,33 +9,34 @@ import {
   Typography,
 } from "@mui/material";
 import Container from "@mui/material/Container";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import SearchBar from "../../components/SearchBar";
 
 import MemeList from "../../components/MemeList";
+// import { Meme } from "../../supabase/types";
 
 export const SearchPage = () => {
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
 
   const [query, setQuery] = useState(searchParams.get("query") || "");
   const [mediaTypes, setMediaTypes] = useState<string[]>(
     (searchParams.get("mediaTypes") || "video,gif,image").split(",")
   );
-  const [memes, setMemes] = useState([]);
+  const [memes] = useState([]);
 
-  useEffect(() => {
-    const filteredMemes = [].filter((item: any) => {
-      return (
-        (item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.description.toLowerCase().includes(query.toLowerCase())) &&
-        mediaTypes.includes(item.type)
-      );
-    });
+  // useEffect(() => {
+  //   const filteredMemes = [].filter((item: Meme) => {
+  //     return (
+  //       (item.title.toLowerCase().includes(query.toLowerCase()) ||
+  //         item.description.toLowerCase().includes(query.toLowerCase())) &&
+  //       mediaTypes.includes(item.type)
+  //     );
+  //   });
 
-    setMemes(filteredMemes);
-  }, [searchParams]);
+  //   setMemes(filteredMemes);
+  // }, [searchParams]);
 
   const onFilterToggle = () => {
     setIsOpen(!isOpen);

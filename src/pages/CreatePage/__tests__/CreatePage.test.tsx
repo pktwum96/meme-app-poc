@@ -1,5 +1,6 @@
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { PostgrestResponseSuccess } from "@supabase/postgrest-js";
+import { StorageError } from "@supabase/storage-js";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
@@ -8,10 +9,9 @@ import {
   uploadMemeToSupabase,
 } from "../../../queries/memes";
 import { Meme } from "../../../supabase/types";
-import { useUser } from "../../../supabase/useUser";
+import { useUser } from "../../../supabase/use-user";
 import { CreatePage } from "../index";
-
-import { StorageError } from "@supabase/storage-js";
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 // Mock the hooks and queries
 vi.mock("@supabase/auth-helpers-react", () => ({
@@ -74,8 +74,18 @@ describe("CreatePage", () => {
     } as any);
 
     vi.mocked(useUser).mockReturnValue({
-      user: { id: "test-user" },
-    } as any);
+      user: {
+        id: "test-user",
+        app_metadata: {},
+        user_metadata: {},
+        aud: "",
+        created_at: "",
+      },
+      accessToken: "",
+      userDetails: null,
+      userPreferences: null,
+      isLoading: false,
+    });
 
     // Clear mocks
     vi.mocked(createMemeInDatabase).mockClear();

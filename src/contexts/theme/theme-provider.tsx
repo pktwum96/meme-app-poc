@@ -3,7 +3,6 @@ import React, {
   Dispatch,
   PropsWithChildren,
   SetStateAction,
-  useContext,
   useState,
 } from "react";
 import { darkTheme } from "./dark-theme";
@@ -17,14 +16,12 @@ const defaultContext = {
   setTheme: () => {},
 };
 
-const ThemeContext = React.createContext<ThemeContextProps>(defaultContext);
+export const ThemeContext =
+  React.createContext<ThemeContextProps>(defaultContext);
 
 interface ThemeProviderProps extends PropsWithChildren {
   theme?: Theme;
 }
-export const useTheme = () => {
-  return useContext(ThemeContext);
-};
 export const ThemeProvider = ({
   children,
   theme: defaultTheme = darkTheme,

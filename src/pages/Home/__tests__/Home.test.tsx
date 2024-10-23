@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { getAllMemes } from "../../../queries/memes";
 import { Meme } from "../../../supabase/types";
 import { HomePage } from "../index";
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 
 // Mock the Supabase context
 vi.mock("@supabase/auth-helpers-react", () => ({

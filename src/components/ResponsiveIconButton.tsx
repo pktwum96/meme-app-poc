@@ -2,7 +2,7 @@ import { ButtonProps } from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ReactNode } from "react";
-import { useTheme } from "../contexts/theme";
+import { useTheme } from "../contexts/theme/theme-provider";
 import { ContainedButton } from "./ContainedButton";
 
 interface ResponsiveIconButtonProps extends ButtonProps {

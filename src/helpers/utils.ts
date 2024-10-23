@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { UserDetails } from "../supabase/types";
+import { Meme, UserDetails } from "../supabase/types";
 
 export const usePageTitle = (title: string) => {
   useEffect(() => {
@@ -9,4 +9,12 @@ export const usePageTitle = (title: string) => {
 
 export const isReviewer = (user: UserDetails) => {
   return user.role === "administrator" || user.role === "moderator";
+};
+
+export const isMemeDraft = (meme: Meme) => {
+  return meme.status === "draft";
+};
+
+export const isMemeInReview = (meme: Meme) => {
+  return meme.status === "review";
 };
