@@ -15,7 +15,7 @@ import {
   uploadMemeToSupabase,
 } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
-import { useUser } from "../../supabase/user-provider";
+import { useUser } from "../../supabase/useUser";
 
 export const CreatePage = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

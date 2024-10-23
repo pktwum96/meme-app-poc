@@ -1,5 +1,5 @@
 import Button, { ButtonProps } from "@mui/material/Button";
-import { useTheme } from "../contexts/theme/theme-provider";
+import { useTheme } from "../contexts/theme";
 
 export const ContainedButton = (props: ButtonProps) => {
   const { theme } = useTheme();

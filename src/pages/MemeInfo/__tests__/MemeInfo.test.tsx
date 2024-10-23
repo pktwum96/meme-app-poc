@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { BrowserRouter, useParams } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { getMemeById } from "../../../queries/memes";
-import { useUser } from "../../../supabase/user-provider";
+import { useUser } from "../../../supabase/useUser";
 import { MemeInfoPage } from "../index";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 

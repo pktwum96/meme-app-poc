@@ -16,10 +16,10 @@ import { MouseEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LogoDark from "../assets/logo-dark-mode.png";
 import Logo from "../assets/logo.png";
+import { useTheme } from "../contexts/theme";
 import { darkTheme } from "../contexts/theme/dark-theme";
 import { lightTheme } from "../contexts/theme/light-theme";
-import { useTheme } from "../contexts/theme/theme-provider";
-import { useUser } from "../supabase/user-provider";
+import { useUser } from "../supabase/useUser";
 import { ContainedButton } from "./ContainedButton";
 
 function NavBar() {

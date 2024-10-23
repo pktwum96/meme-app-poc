@@ -14,7 +14,7 @@ import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import { getMemeById, submitMemeForReview } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
-import { useUser } from "../../supabase/user-provider";
+import { useUser } from "../../supabase/useUser";
 
 export const MemeInfoPage = () => {
   const { memeId } = useParams();
@@ -72,7 +72,6 @@ export const MemeInfoPage = () => {
 
     setIsLoading(false);
   };
-  console.log(meme);
   if (!meme) {
     return "Meme not found";
   }

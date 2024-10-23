@@ -9,7 +9,7 @@ import {
   uploadMemeToSupabase,
 } from "../../../queries/memes";
 import { Meme } from "../../../supabase/types";
-import { useUser } from "../../../supabase/use-user";
+import { useUser } from "../../../supabase/useUser";
 import { CreatePage } from "../index";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 

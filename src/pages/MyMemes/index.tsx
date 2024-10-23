@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import MemeList from "../../components/MemeList";
 import { getAllMyMemes } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
-import { useUser } from "../../supabase/user-provider";
+import { useUser } from "../../supabase/useUser";
 
 import { capitalize, groupBy } from "lodash";
 import Text from "../../components/Text";

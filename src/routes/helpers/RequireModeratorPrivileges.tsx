@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { isReviewer } from "../../helpers/utils";
-import { useUser } from "../../supabase/user-provider";
+import { useUser } from "../../supabase/useUser";
 
 export const RequireModeratorPrivileges = () => {
   const { userDetails, isLoading } = useUser();
