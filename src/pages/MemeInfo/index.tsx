@@ -1,6 +1,5 @@
 import { Delete, Edit } from "@mui/icons-material";
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -10,8 +9,10 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ContainedButton } from "../../components/ContainedButton";
 import { MediaRenderer } from "../../components/MediaRenderer";
 import { ResponsiveIconButton } from "../../components/ResponsiveIconButton";
+import { StatusChip } from "../../components/StatusChip";
 import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
+import { isMemeDraft } from "../../helpers/utils";
 import { getMemeById, submitMemeForReview } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
@@ -56,14 +57,16 @@ export const MemeInfoPage = () => {
     if (meme) {
       try {
         setIsLoading(true);
-        const [{ error: error1 }, { error: error2, data: updatedMeme }] =
-          await Promise.all(submitMemeForReview(supabaseClient, meme));
+        const { error, data: updatedMeme } = await submitMemeForReview(
+          supabaseClient,
+          meme
+        );
 
-        if (error1 || error2) {
-          throw new Error((error1 || error2 || {}).message);
+        if (error) {
+          throw new Error(error.message);
         }
 
-        navigate(`/meme/${meme.id}`, { state: { meme: updatedMeme } });
+        setMeme(updatedMeme);
       } catch (error) {
         setIsLoading(false);
         toast.error((error as Error).message);
@@ -79,16 +82,26 @@ export const MemeInfoPage = () => {
     <Container sx={{ paddingY: 3 }}>
       {isCreatedByUser ? (
         <Stack direction="row" paddingY={1} alignItems={"center"}>
-          <Chip label={meme.status.toLocaleUpperCase()} size="small" />
-          <Stack direction="row" spacing={1} marginLeft={"auto"}>
-            <ResponsiveIconButton
-              label={"Delete"}
-              icon={<Delete />}
-              color="error"
-              size="small"
-            />
-            <ResponsiveIconButton label={"Edit"} icon={<Edit />} size="small" />
-          </Stack>
+          <StatusChip
+            status={meme.status}
+            label={meme.status.toLocaleUpperCase()}
+            size="small"
+          />
+          {isMemeDraft(meme) ? (
+            <Stack direction="row" spacing={1} marginLeft={"auto"}>
+              <ResponsiveIconButton
+                label={"Delete"}
+                icon={<Delete />}
+                color="error"
+                size="small"
+              />
+              <ResponsiveIconButton
+                label={"Edit"}
+                icon={<Edit />}
+                size="small"
+              />
+            </Stack>
+          ) : null}
         </Stack>
       ) : null}
       <Text variant="h5">{meme?.title}</Text>

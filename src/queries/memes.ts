@@ -52,22 +52,15 @@ export const submitMemeForReview = (
   client: SupabaseClient<Database>,
   meme: Meme
 ) => {
-  return [
-    client.from("reviews").insert({
+  return client
+    .from("memes")
+    .update({
+      status: "review",
       created_by: meme.created_by,
-      status: "pending",
-      meme_id: meme.id,
-    }),
-    client
-      .from("memes")
-      .update({
-        status: "review",
-        created_by: meme.created_by,
-      })
-      .eq("id", meme.id)
-      .select("*")
-      .single(),
-  ];
+    })
+    .eq("id", meme.id)
+    .select("*")
+    .single();
 };
 
 export const approveMeme = (client: SupabaseClient<Database>, meme: Meme) => {

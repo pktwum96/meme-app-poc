@@ -29,6 +29,7 @@ export const Root = () => {
             <Route path="/meme">
               <Route path="create" element={<CreatePage />} />
               <Route path=":memeId" element={<MemeInfoPage />} />
+              <Route path=":memeId/:slugId" element={<MemeInfoPage />} />
               <Route element={<RequireModeratorPrivileges />}>
                 <Route path="review">
                   <Route index element={<ReviewPage />} />

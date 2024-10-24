@@ -1,7 +1,6 @@
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
@@ -14,6 +13,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MediaRenderer } from "../../components/MediaRenderer";
+import { StatusChip } from "../../components/StatusChip";
 import Text from "../../components/Text";
 import {
   approveMeme,
@@ -119,12 +119,7 @@ export const ReviewPage = () => {
                 <TableCell>
                   {meme.status !== "review" ? (
                     <Box>
-                      <Chip
-                        color={
-                          meme.status === "published" ? "success" : "error"
-                        }
-                        label={meme.status}
-                      />
+                      <StatusChip status={meme.status} label={meme.status} />
                     </Box>
                   ) : (
                     <Box display={"flex"}>
