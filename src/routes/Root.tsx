@@ -6,6 +6,7 @@ import { HomePage } from "../pages/Home";
 import { Login } from "../pages/Login";
 import { MemeInfoPage } from "../pages/MemeInfo";
 import { MyMemes } from "../pages/MyMemes";
+import { ReviewPage } from "../pages/ReviewPage";
 import { SearchPage } from "../pages/SearchPage";
 import { RequireAuth } from "./helpers/RequireAuth";
 import { RequireModeratorPrivileges } from "./helpers/RequireModeratorPrivileges";
@@ -30,6 +31,7 @@ export const Root = () => {
               <Route path=":memeId" element={<MemeInfoPage />} />
               <Route element={<RequireModeratorPrivileges />}>
                 <Route path="review">
+                  <Route index element={<ReviewPage />} />
                   <Route path=":memeId" element={<MemeInfoPage />} />
                 </Route>
               </Route>

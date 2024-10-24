@@ -1,8 +1,7 @@
-import "./App.css";
-
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter } from "react-router-dom";
-import { LoadingProvider } from "./contexts/loading";
+import "./App.css";
+import { LoadingProvider } from "./contexts/loading/LoadingProvider";
 import { ThemeProvider } from "./contexts/theme/theme-provider";
 import ToasterProvider from "./contexts/toast";
 import { Root } from "./routes/Root";

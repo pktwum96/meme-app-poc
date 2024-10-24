@@ -19,6 +19,7 @@ import Logo from "../assets/logo.png";
 import { useTheme } from "../contexts/theme";
 import { darkTheme } from "../contexts/theme/dark-theme";
 import { lightTheme } from "../contexts/theme/light-theme";
+import { isReviewer } from "../helpers/utils";
 import { useUser } from "../supabase/useUser";
 import { ContainedButton } from "./ContainedButton";
 
@@ -98,6 +99,16 @@ function NavBar() {
                 >
                   My memes
                 </Button>
+                {isReviewer(userDetails) ? (
+                  <Button
+                    sx={{ color: "inherit" }}
+                    onClick={() => {
+                      navigate("/meme/review");
+                    }}
+                  >
+                    Reviews
+                  </Button>
+                ) : null}
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
@@ -141,7 +152,6 @@ function NavBar() {
                   navigate("/login");
                 }}
               >
-                {" "}
                 Sign In
               </ContainedButton>
             )}

@@ -20,6 +20,17 @@ export const getAllMyMemes = (
   return client.from("memes").select("*").eq("created_by", userId);
 };
 
+export const getAllMyMemesInReview = (
+  client: SupabaseClient<Database>,
+  reviewerId: string
+) => {
+  return client
+    .from("memes")
+    .select("*")
+    .eq("status", "review")
+    .not("created_by", "eq", reviewerId);
+};
+
 export const uploadMemeToSupabase = (
   client: SupabaseClient<Database>,
   selectedFile: File,
@@ -57,4 +68,26 @@ export const submitMemeForReview = (
       .select("*")
       .single(),
   ];
+};
+
+export const approveMeme = (client: SupabaseClient<Database>, meme: Meme) => {
+  return client
+    .from("memes")
+    .update({
+      status: "published",
+    })
+    .eq("id", meme.id)
+    .select("*")
+    .single();
+};
+
+export const rejectMeme = (client: SupabaseClient<Database>, meme: Meme) => {
+  return client
+    .from("memes")
+    .update({
+      status: "rejected",
+    })
+    .eq("id", meme.id)
+    .select("*")
+    .single();
 };

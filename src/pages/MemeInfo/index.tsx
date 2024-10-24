@@ -76,7 +76,7 @@ export const MemeInfoPage = () => {
     return "Meme not found";
   }
   return (
-    <Container>
+    <Container sx={{ paddingY: 3 }}>
       {isCreatedByUser ? (
         <Stack direction="row" paddingY={1} alignItems={"center"}>
           <Chip label={meme.status.toLocaleUpperCase()} size="small" />
