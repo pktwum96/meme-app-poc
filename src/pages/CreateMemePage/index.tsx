@@ -3,9 +3,11 @@ import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import { isString } from "lodash";
 import { ChangeEvent, FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import AsyncSelect from "../../components/AsyncSelect";
 import { ContainedButton } from "../../components/ContainedButton";
 import FileUploadArea from "../../components/FileUploadArea";
 import Text from "../../components/Text";
@@ -17,10 +19,15 @@ import {
 import { Meme } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
-export const CreatePage = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+export const CreateMemePage = ({ meme }: { meme?: Meme }) => {
+  const [selectedFile, setSelectedFile] = useState<File | string | undefined>(
+    meme?.media_url
+  );
+  const [title, setTitle] = useState(meme?.title);
+  const [description, setDescription] = useState(meme?.description);
+
+  const [tags, setTags] = useState<string[]>([]);
+
   const navigate = useNavigate();
   const { setIsLoading } = useFullScreenLoading();
   const { user } = useUser();
@@ -34,38 +41,43 @@ export const CreatePage = () => {
       return;
     }
     setIsLoading(true);
+
     try {
-      // Upload file to Supabase storage
-      const fileExt = selectedFile.name.split(".").pop();
-      const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `public/${fileName}`;
-      const { error } = await uploadMemeToSupabase(
-        supabase,
-        selectedFile,
-        filePath
-      );
+      let mediaUrl = meme?.media_url || "";
+      let filePath = meme?.media_path;
+      let mediaType = meme?.media_type;
+      if (!isString(selectedFile)) {
+        // Upload file to Supabase storage
+        const fileExt = selectedFile.name.split(".").pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        mediaType = selectedFile.type;
+        filePath = `public/${fileName}`;
+        const { error } = await uploadMemeToSupabase(
+          supabase,
+          selectedFile,
+          filePath
+        );
 
-      if (error) {
-        throw error;
+        if (error) {
+          throw error;
+        }
+        mediaUrl = supabase.storage.from("Meme_Bucket").getPublicUrl(filePath)
+          .data.publicUrl;
       }
-      const mediaUrl = supabase.storage
-        .from("Meme_Bucket")
-        .getPublicUrl(filePath).data.publicUrl;
-
       // Insert meme data into the memes table
 
-      const meme = {
+      const uploadMeme = {
         title,
         description,
         media_url: mediaUrl, // Full public URL for frontend use
         media_path: filePath,
-        media_type: selectedFile.type,
+        media_type: mediaType,
         created_by: user!.id, // Assumes user is authenticated
         status: "draft" as Meme["status"], // Default status
       };
       const { data, error: dbError } = await createMemeInDatabase(
         supabase,
-        meme
+        uploadMeme
       );
 
       if (dbError) {
@@ -74,7 +86,7 @@ export const CreatePage = () => {
 
       setIsLoading(false);
       toast.success("Meme uploaded successfully!");
-      setSelectedFile(null);
+      setSelectedFile(undefined);
       setTitle("");
       setDescription("");
       if (data) {
@@ -115,7 +127,7 @@ export const CreatePage = () => {
           <Stack spacing={2} direction={"row"} width={"100%"}>
             <TextField label="Tags" sx={{ flex: 1 }} />
 
-            <TextField label="Tags" sx={{ flex: 1 }} />
+            <AsyncSelect options={[]} selected={[]} />
           </Stack>
           <ContainedButton size="large" type="submit">
             Save

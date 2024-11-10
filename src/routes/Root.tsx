@@ -1,6 +1,6 @@
 import { Outlet, Route, Routes } from "react-router-dom";
 import { WrappedNavbar } from "../components/WrappedNavbar";
-import { CreatePage } from "../pages/CreatePage";
+import { CreateMemePage } from "../pages/CreateMemePage";
 import { ErrorPage } from "../pages/ErrorPage";
 import { HomePage } from "../pages/Home";
 import { Login } from "../pages/Login";
@@ -27,7 +27,7 @@ export const Root = () => {
             <Route path="/my-memes" element={<MyMemes />} />
 
             <Route path="/meme">
-              <Route path="create" element={<CreatePage />} />
+              <Route path="create" element={<CreateMemePage />} />
               <Route path=":memeId" element={<MemeInfoPage />} />
               <Route path=":memeId/:slugId" element={<MemeInfoPage />} />
               <Route element={<RequireModeratorPrivileges />}>

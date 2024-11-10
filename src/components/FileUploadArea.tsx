@@ -1,10 +1,11 @@
+import { isString } from "lodash";
 import { ChangeEvent, Dispatch, DragEvent, useState } from "react";
 
 const FileUploadArea = ({
   selectedFile,
   setSelectedFile,
 }: {
-  selectedFile: File | null;
+  selectedFile: File | string | undefined;
   setSelectedFile: Dispatch<File>;
 }) => {
   const [dragActive, setDragActive] = useState(false);
@@ -63,7 +64,7 @@ const FileUploadArea = ({
         onChange={handleFileChange}
         style={{ display: "none" }}
       />
-      {selectedFile ? (
+      {selectedFile && !isString(selectedFile) ? (
         <p>File selected: {selectedFile.name}</p>
       ) : (
         <p>Drag and drop your file here or click to upload</p>

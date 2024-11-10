@@ -6,6 +6,10 @@ export type UserPreferences = Tables<"user_preferences">;
 export type Meme = Tables<"memes">;
 export type Review = Tables<"reviews">;
 
+export type MemeWithTags = Tables<"memes"> & {
+  tags: { name: string }[]; // Adjust based on the actual structure of your tags table
+};
+
 // Insert Data
 export type UserDetailsInsert = TablesInsert<"users">;
 export type UserPreferencesInsert = TablesInsert<"user_preferences">;

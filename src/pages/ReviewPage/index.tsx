@@ -93,7 +93,6 @@ export const ReviewPage = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Index</TableCell>
               <TableCell>Media</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Created At</TableCell>
@@ -104,11 +103,11 @@ export const ReviewPage = () => {
           <TableBody>
             {reviewList.map((meme, index) => (
               <TableRow key={index}>
-                <TableCell>{index}</TableCell>
                 <TableCell sx={{ maxWidth: "15rem" }}>
                   <MediaRenderer
                     type={meme.media_type || ""}
                     src={meme.media_url}
+                    alt={meme.title}
                   />
                 </TableCell>
                 <TableCell>{meme.title}</TableCell>

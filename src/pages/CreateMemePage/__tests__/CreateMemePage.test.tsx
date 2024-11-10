@@ -10,7 +10,7 @@ import {
 } from "../../../queries/memes";
 import { Meme } from "../../../supabase/types";
 import { useUser } from "../../../supabase/useUser";
-import { CreatePage } from "../index";
+import { CreateMemePage } from "../index";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 // Mock the hooks and queries
@@ -61,7 +61,7 @@ vi.mock("react-hot-toast", () => ({
     error: vi.fn(), // You can mock other toast types like error if needed
   },
 }));
-describe("CreatePage", () => {
+describe("CreateMemePage", () => {
   beforeEach(() => {
     vi.mocked(useSessionContext).mockReturnValue({
       supabaseClient: {
@@ -96,7 +96,7 @@ describe("CreatePage", () => {
   it("renders create page with form elements", () => {
     render(
       <BrowserRouter>
-        <CreatePage />
+        <CreateMemePage />
       </BrowserRouter>
     );
 
@@ -113,7 +113,7 @@ describe("CreatePage", () => {
   it("requires title field", () => {
     render(
       <BrowserRouter>
-        <CreatePage />
+        <CreateMemePage />
       </BrowserRouter>
     );
 
@@ -129,7 +129,7 @@ describe("CreatePage", () => {
 
     render(
       <BrowserRouter>
-        <CreatePage />
+        <CreateMemePage />
       </BrowserRouter>
     );
 
@@ -161,7 +161,7 @@ describe("CreatePage", () => {
 
     render(
       <BrowserRouter>
-        <CreatePage />
+        <CreateMemePage />
       </BrowserRouter>
     );
 

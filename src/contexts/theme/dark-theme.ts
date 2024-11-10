@@ -8,6 +8,6 @@ export const darkTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Poppins",
+    fontFamily: "Geist",
   },
 });

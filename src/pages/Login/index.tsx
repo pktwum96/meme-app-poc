@@ -18,7 +18,7 @@ export const Login = () => {
     >
       <Box width={"100%"} textAlign={"center"}>
         <Text fontSize={60} padding={4}>
-          Login
+          Login / SignUp
         </Text>
         <LoginInButton />
       </Box>

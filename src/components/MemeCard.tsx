@@ -20,7 +20,11 @@ function MemeCard(meme: Meme) {
         }}
       >
         <Box position={"relative"} maxHeight={"285px"}>
-          <MediaRenderer type={meme.media_type!} src={meme.media_url} />
+          <MediaRenderer
+            type={meme.media_type!}
+            src={meme.media_url}
+            alt={meme.title}
+          />
           {/* <CardActions sx={{ position: "absolute", top: 0, right: "0.5rem" }}>
             <IconButton
               component={"span"}

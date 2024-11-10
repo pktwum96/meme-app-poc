@@ -10,7 +10,14 @@ export const getMemeById = (
   client: SupabaseClient<Database>,
   memeId: string
 ) => {
-  return client.from("memes").select("*").eq("id", memeId).single();
+  return client
+    .from("memes")
+    .select(
+      `*,
+      tags (name)`
+    )
+    .eq("id", memeId)
+    .single();
 };
 
 export const getAllMyMemes = (

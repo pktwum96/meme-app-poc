@@ -5,6 +5,6 @@ export const lightTheme = createTheme({
     mode: "light",
   },
   typography: {
-    fontFamily: "Poppins",
+    fontFamily: "Geist",
   },
 });

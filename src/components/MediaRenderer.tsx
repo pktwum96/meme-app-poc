@@ -1,8 +1,37 @@
-import CardMedia from "@mui/material/CardMedia";
+export const MediaRenderer = ({
+  type,
+  src,
+  alt,
+}: {
+  type: string;
+  src: string;
+  alt: string;
+}) => {
+  const mediaType = type.includes("video")
+    ? "video"
+    : type.includes("gif")
+    ? "gif"
+    : "image";
 
-export const MediaRenderer = ({ type, src }: { type: string; src: string }) => {
-  const mediaType = type.includes("video") ? "video" : "img";
-  return (
-    <CardMedia src={src} component={mediaType} sx={{ aspectRatio: "16/9" }} />
-  );
+  const commonStyles = {
+    width: "100%",
+    aspectRatio: "16/9",
+  };
+
+  switch (mediaType) {
+    case "gif":
+    case "image":
+      return <img src={src} alt={alt} style={commonStyles} />;
+
+    case "video":
+      return (
+        <video controls style={commonStyles}>
+          <source src={src} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      );
+
+    default:
+      return <p>Unsupported media type</p>;
+  }
 };

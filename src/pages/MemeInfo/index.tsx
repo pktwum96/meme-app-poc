@@ -1,20 +1,23 @@
 import { Delete, Edit } from "@mui/icons-material";
 import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import { merge } from "lodash";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { ContainedButton } from "../../components/ContainedButton";
 import { MediaRenderer } from "../../components/MediaRenderer";
 import { ResponsiveIconButton } from "../../components/ResponsiveIconButton";
 import { StatusChip } from "../../components/StatusChip";
 import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
+import { useTheme } from "../../contexts/theme";
 import { isMemeDraft } from "../../helpers/utils";
 import { getMemeById, submitMemeForReview } from "../../queries/memes";
-import { Meme } from "../../supabase/types";
+import { MemeWithTags } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
 export const MemeInfoPage = () => {
@@ -24,12 +27,11 @@ export const MemeInfoPage = () => {
   const { userDetails } = useUser();
 
   const stateMeme = state?.meme;
-  const [meme, setMeme] = useState<Meme | undefined>(stateMeme);
+  const [meme, setMeme] = useState<MemeWithTags | undefined>(stateMeme);
   const { supabaseClient } = useSessionContext();
   const { setIsLoading } = useFullScreenLoading();
 
-  const navigate = useNavigate();
-
+  const { theme } = useTheme();
   useEffect(() => {
     const fetchMeme = async () => {
       setIsLoading(true);
@@ -57,6 +59,7 @@ export const MemeInfoPage = () => {
     if (meme) {
       try {
         setIsLoading(true);
+
         const { error, data: updatedMeme } = await submitMemeForReview(
           supabaseClient,
           meme
@@ -66,7 +69,7 @@ export const MemeInfoPage = () => {
           throw new Error(error.message);
         }
 
-        setMeme(updatedMeme);
+        setMeme(merge(meme, updatedMeme));
       } catch (error) {
         setIsLoading(false);
         toast.error((error as Error).message);
@@ -80,45 +83,58 @@ export const MemeInfoPage = () => {
   }
   return (
     <Container sx={{ paddingY: 3 }}>
-      {isCreatedByUser ? (
-        <Stack direction="row" paddingY={1} alignItems={"center"}>
-          <StatusChip
-            status={meme.status}
-            label={meme.status.toLocaleUpperCase()}
-            size="small"
-          />
-          {isMemeDraft(meme) ? (
-            <Stack direction="row" spacing={1} marginLeft={"auto"}>
-              <ResponsiveIconButton
-                label={"Delete"}
-                icon={<Delete />}
-                color="error"
-                size="small"
-              />
-              <ResponsiveIconButton
-                label={"Edit"}
-                icon={<Edit />}
-                size="small"
-              />
-            </Stack>
-          ) : null}
-        </Stack>
-      ) : null}
-      <Text variant="h5">{meme?.title}</Text>
+      <Card sx={{ p: "1.5rem" }}>
+        {isCreatedByUser ? (
+          <Stack direction="row" paddingBottom={"1.5rem"} alignItems={"center"}>
+            <Text fontWeight={theme.typography.fontWeightBold} variant="h5">
+              {meme?.title}
+            </Text>
+            <StatusChip
+              status={meme.status}
+              label={meme.status.toLocaleUpperCase()}
+              size="small"
+              sx={{ mx: 1 }}
+            />
+            {isMemeDraft(meme) ? (
+              <Stack direction="row" spacing={1} marginLeft={"auto"}>
+                <ResponsiveIconButton
+                  label={"Delete"}
+                  icon={<Delete />}
+                  color="error"
+                  size="small"
+                />
+                <ResponsiveIconButton
+                  label={"Edit"}
+                  icon={<Edit />}
+                  size="small"
+                />
+              </Stack>
+            ) : null}
+          </Stack>
+        ) : null}
 
-      <MediaRenderer type={meme.media_type!} src={meme.media_url!} />
-      <Text variant="body1">{meme?.description}</Text>
+        <MediaRenderer
+          alt={meme.title}
+          type={meme.media_type!}
+          src={meme.media_url!}
+        />
+        <Text sx={{ paddingTop: "1.5rem" }} variant="body1">
+          {meme?.description}
+        </Text>
 
-      {isCreatedByUser && meme.status === "draft" ? (
-        <Box padding={2} display={"flex"}>
-          <ContainedButton
-            sx={{ marginLeft: "auto" }}
-            onClick={onSubmitForReview}
-          >
-            Submit for review
-          </ContainedButton>
-        </Box>
-      ) : null}
+        {meme.tags ? <></> : null}
+
+        {isCreatedByUser && meme.status === "draft" ? (
+          <Box padding={2} display={"flex"}>
+            <ContainedButton
+              sx={{ marginLeft: "auto" }}
+              onClick={onSubmitForReview}
+            >
+              Submit for review
+            </ContainedButton>
+          </Box>
+        ) : null}
+      </Card>
     </Container>
   );
 };
