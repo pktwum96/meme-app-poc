@@ -7,9 +7,11 @@ import { isString } from "lodash";
 import { ChangeEvent, FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import AsyncSelect from "../../components/AsyncSelect";
+import { LanguageOption } from "../../assets/data/languages";
 import { ContainedButton } from "../../components/ContainedButton";
 import FileUploadArea from "../../components/FileUploadArea";
+import LanguageSelector from "../../components/LanguageSelector";
+import TagsSelector from "../../components/TagsSelector";
 import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import {
@@ -26,7 +28,11 @@ export const CreateMemePage = ({ meme }: { meme?: Meme }) => {
   const [title, setTitle] = useState(meme?.title);
   const [description, setDescription] = useState(meme?.description);
 
-  const [tags, setTags] = useState<string[]>([]);
+  // const [tags, setTags] = useState<string[]>([]);
+
+  const [selectedLanguages, setSelectedLanguages] = useState<LanguageOption[]>(
+    []
+  );
 
   const navigate = useNavigate();
   const { setIsLoading } = useFullScreenLoading();
@@ -124,10 +130,15 @@ export const CreateMemePage = ({ meme }: { meme?: Meme }) => {
             }}
           />
 
-          <Stack spacing={2} direction={"row"} width={"100%"}>
-            <TextField label="Tags" sx={{ flex: 1 }} />
-
-            <AsyncSelect options={[]} selected={[]} />
+          <Stack
+            spacing={2}
+            direction={{ xs: "column", md: "row" }}
+            width={"100%"}
+          >
+            <TagsSelector />
+            <LanguageSelector
+              {...{ selectedLanguages, setSelectedLanguages }}
+            />
           </Stack>
           <ContainedButton size="large" type="submit">
             Save

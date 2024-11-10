@@ -106,3 +106,5 @@ export const languages = [
   { code: "zh", name: "Chinese" },
   { code: "zu", name: "Zulu" },
 ];
+
+export type LanguageOption = (typeof languages)[0];

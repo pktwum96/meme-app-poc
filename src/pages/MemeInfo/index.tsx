@@ -1,6 +1,8 @@
 import { Delete, Edit } from "@mui/icons-material";
+import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -38,6 +40,7 @@ export const MemeInfoPage = () => {
       try {
         if (!meme && memeId) {
           const { data, error } = await getMemeById(supabaseClient, memeId);
+
           if (error) {
             throw new Error(error.message);
           }
@@ -118,11 +121,19 @@ export const MemeInfoPage = () => {
           type={meme.media_type!}
           src={meme.media_url!}
         />
-        <Text sx={{ paddingTop: "1.5rem" }} variant="body1">
+        <Text sx={{ padding: "1rem" }} variant="body1">
           {meme?.description}
         </Text>
 
-        {meme.tags ? <></> : null}
+        {meme.tags?.length ? (
+          <Stack paddingBottom={"1rem"} direction={"row"}>
+            {meme.tags?.map((tag) => {
+              return <Chip key={tag.name} label={`# ${tag.name}`} />;
+            })}
+          </Stack>
+        ) : null}
+
+        <Divider />
 
         {isCreatedByUser && meme.status === "draft" ? (
           <Box padding={2} display={"flex"}>
