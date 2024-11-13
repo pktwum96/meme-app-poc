@@ -1,3 +1,5 @@
+import { VideoPlayer } from "./VideoPlayer";
+
 export const MediaRenderer = ({
   type,
   src,
@@ -24,12 +26,7 @@ export const MediaRenderer = ({
       return <img src={src} alt={alt} style={commonStyles} />;
 
     case "video":
-      return (
-        <video controls style={commonStyles}>
-          <source src={src} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      );
+      return <VideoPlayer src={src} />;
 
     default:
       return <p>Unsupported media type</p>;

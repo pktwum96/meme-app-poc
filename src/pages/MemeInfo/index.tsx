@@ -9,7 +9,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { merge } from "lodash";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ContainedButton } from "../../components/ContainedButton";
 import { MediaRenderer } from "../../components/MediaRenderer";
 import { ResponsiveIconButton } from "../../components/ResponsiveIconButton";
@@ -45,7 +45,13 @@ export const MemeInfoPage = () => {
             throw new Error(error.message);
           }
 
-          setMeme(data);
+          if (data) {
+            const memeData = {
+              ...data,
+              tags: data.tags.map((tag: { name: string }) => tag.name),
+            };
+            setMeme(memeData);
+          }
         }
       } catch (error) {
         setIsLoading(false);
@@ -55,6 +61,8 @@ export const MemeInfoPage = () => {
     fetchMeme();
     setIsLoading(false);
   }, [memeId, meme, setIsLoading, supabaseClient]);
+
+  const navigate = useNavigate();
 
   const isCreatedByUser = meme?.created_by === userDetails?.id;
 
@@ -107,6 +115,7 @@ export const MemeInfoPage = () => {
                   size="small"
                 />
                 <ResponsiveIconButton
+                  onClick={() => navigate(`/meme/${memeId}/edit`)}
                   label={"Edit"}
                   icon={<Edit />}
                   size="small"
@@ -128,7 +137,7 @@ export const MemeInfoPage = () => {
         {meme.tags?.length ? (
           <Stack paddingBottom={"1rem"} direction={"row"}>
             {meme.tags?.map((tag) => {
-              return <Chip key={tag.name} label={`# ${tag.name}`} />;
+              return <Chip key={tag} label={`# ${tag}`} />;
             })}
           </Stack>
         ) : null}

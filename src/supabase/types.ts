@@ -7,7 +7,7 @@ export type Meme = Tables<"memes">;
 export type Review = Tables<"reviews">;
 
 export type MemeWithTags = Tables<"memes"> & {
-  tags: { name: string }[]; // Adjust based on the actual structure of your tags table
+  tags: string[];
 };
 
 // Insert Data

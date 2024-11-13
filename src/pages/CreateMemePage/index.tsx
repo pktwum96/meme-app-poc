@@ -4,13 +4,13 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { isString } from "lodash";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { LanguageOption } from "../../assets/data/languages";
 import { ContainedButton } from "../../components/ContainedButton";
 import FileUploadArea from "../../components/FileUploadArea";
 import LanguageSelector from "../../components/LanguageSelector";
+import { MediaRenderer } from "../../components/MediaRenderer";
 import TagsSelector from "../../components/TagsSelector";
 import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
@@ -18,21 +18,26 @@ import {
   createMemeInDatabase,
   uploadMemeToSupabase,
 } from "../../queries/memes";
-import { Meme } from "../../supabase/types";
+import { Meme, MemeWithTags } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
-export const CreateMemePage = ({ meme }: { meme?: Meme }) => {
+export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
   const [selectedFile, setSelectedFile] = useState<File | string | undefined>(
     meme?.media_url
   );
-  const [title, setTitle] = useState(meme?.title);
-  const [description, setDescription] = useState(meme?.description);
 
-  // const [tags, setTags] = useState<string[]>([]);
-
-  const [selectedLanguages, setSelectedLanguages] = useState<LanguageOption[]>(
-    []
-  );
+  const [title, setTitle] = useState(meme?.title || "");
+  const [description, setDescription] = useState(meme?.description || "");
+  const [tags, setTags] = useState(meme?.tags || []);
+  const [languages, setLanguages] = useState<string[]>(meme?.languages || []);
+  useEffect(() => {
+    if (meme) {
+      setTitle(meme.title);
+      setDescription(meme.description || "");
+      setLanguages(meme.languages || []);
+      setSelectedFile(meme.media_url);
+    }
+  }, [meme]);
 
   const navigate = useNavigate();
   const { setIsLoading } = useFullScreenLoading();
@@ -80,6 +85,7 @@ export const CreateMemePage = ({ meme }: { meme?: Meme }) => {
         media_type: mediaType,
         created_by: user!.id, // Assumes user is authenticated
         status: "draft" as Meme["status"], // Default status
+        languages,
       };
       const { data, error: dbError } = await createMemeInDatabase(
         supabase,
@@ -110,7 +116,15 @@ export const CreateMemePage = ({ meme }: { meme?: Meme }) => {
       </Text>
       <Box role="form" component="form" paddingTop={2} onSubmit={handleSubmit}>
         <Stack spacing={2}>
-          <FileUploadArea {...{ selectedFile, setSelectedFile }} />
+          {typeof selectedFile === "string" ? (
+            <MediaRenderer
+              type={meme?.media_type || ""}
+              src={selectedFile}
+              alt={meme?.title || ""}
+            />
+          ) : (
+            <FileUploadArea {...{ selectedFile, setSelectedFile }} />
+          )}
           <TextField
             label="Title"
             required
@@ -135,9 +149,10 @@ export const CreateMemePage = ({ meme }: { meme?: Meme }) => {
             direction={{ xs: "column", md: "row" }}
             width={"100%"}
           >
-            <TagsSelector />
+            <TagsSelector {...{ tags, setTags }} />
             <LanguageSelector
-              {...{ selectedLanguages, setSelectedLanguages }}
+              selectedLanguages={languages}
+              setSelectedLanguages={setLanguages}
             />
           </Stack>
           <ContainedButton size="large" type="submit">

@@ -6,26 +6,31 @@ import { LanguageOption, languages } from "../assets/data/languages";
 const filter = createFilterOptions<LanguageOption>();
 
 interface LanguageSelectorProps {
-  selectedLanguages: LanguageOption[];
-  setSelectedLanguages: Dispatch<SetStateAction<LanguageOption[]>>;
+  selectedLanguages: string[];
+  setSelectedLanguages: Dispatch<SetStateAction<string[]>>;
 }
 export default function LanguageSelector({
   selectedLanguages,
   setSelectedLanguages,
 }: LanguageSelectorProps) {
+  const formattedSelected = selectedLanguages.map((selected) => {
+    const listedLang = languages.find((lang) => lang.code === selected);
+
+    return listedLang || { code: selected, name: selected };
+  });
   return (
     <Autocomplete
-      value={selectedLanguages}
+      value={formattedSelected}
       multiple
-      onChange={(_event, newValues, _s, selected) => {
-        if (selected?.option.name.includes("Add ")) {
-          setSelectedLanguages((prev) => [
-            ...prev,
-            { code: selected.option.code, name: selected.option.code },
-          ]);
-        } else {
-          setSelectedLanguages(newValues as LanguageOption[]);
-        }
+      onChange={(_event, newValues) => {
+        const newLanguages = newValues.map((val) => {
+          if (typeof val === "string") {
+            return val;
+          } else {
+            return val.code;
+          }
+        });
+        setSelectedLanguages(newLanguages);
       }}
       filterOptions={(options, params) => {
         const filtered = filter(options, params);
