@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -155,9 +156,15 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
               setSelectedLanguages={setLanguages}
             />
           </Stack>
-          <ContainedButton size="large" type="submit">
-            Save
-          </ContainedButton>
+
+          <Stack direction={"row"} gap={2}>
+            <ContainedButton size="large" sx={{ flex: 1 }} type="submit">
+              Save
+            </ContainedButton>
+            <Button variant="outlined" onClick={() => navigate("/my-memes")}>
+              Cancel
+            </Button>
+          </Stack>
         </Stack>
       </Box>
     </Container>

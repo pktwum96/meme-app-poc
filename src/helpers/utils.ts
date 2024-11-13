@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { languages } from "../assets/data/languages";
 import { Meme, UserDetails } from "../supabase/types";
 
 export const usePageTitle = (title: string) => {
@@ -17,4 +18,8 @@ export const isMemeDraft = (meme: Meme) => {
 
 export const isMemeInReview = (meme: Meme) => {
   return meme.status === "review";
+};
+
+export const retrieveLanguageFromList = (code: string) => {
+  return languages.find((lang) => lang.code === code);
 };

@@ -39,11 +39,13 @@ export const MyMemes = () => {
 
   const arrangedMemes = groupBy(memeList, ({ status }) => status);
   return (
-    <Container maxWidth="xl" sx={{ paddingY: 4 }}>
+    <Container maxWidth="xl">
       {Object.keys(arrangedMemes).map((memeStatus) => {
         return (
           <Fragment key={memeStatus}>
-            <Text variant="h6">{capitalize(memeStatus)}</Text>
+            <Text variant="h6" padding={2} paddingTop={3}>
+              {capitalize(memeStatus)}
+            </Text>
             <MemeList memes={arrangedMemes[memeStatus]} />
           </Fragment>
         );

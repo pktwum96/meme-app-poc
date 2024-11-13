@@ -1,5 +1,6 @@
 import { Delete, Edit } from "@mui/icons-material";
-import { Divider } from "@mui/material";
+import LanguageIcon from "@mui/icons-material/Language";
+import { Divider, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
@@ -17,7 +18,7 @@ import { StatusChip } from "../../components/StatusChip";
 import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import { useTheme } from "../../contexts/theme";
-import { isMemeDraft } from "../../helpers/utils";
+import { isMemeDraft, retrieveLanguageFromList } from "../../helpers/utils";
 import { getMemeById, submitMemeForReview } from "../../queries/memes";
 import { MemeWithTags } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
@@ -143,6 +144,25 @@ export const MemeInfoPage = () => {
         ) : null}
 
         <Divider />
+
+        <Stack>
+          {meme.languages?.length ? (
+            <Box display={"flex"} alignItems={"center"}>
+              <LanguageIcon sx={{ margin: 1 }} fontSize="small" />
+
+              {meme.languages.map((langCode, index, array) => {
+                const languageText =
+                  retrieveLanguageFromList(langCode)?.name || "";
+                return (
+                  <Typography variant="body2" paddingRight={1}>
+                    {languageText}
+                    {index !== array.length - 1 ? ", " : ""}
+                  </Typography>
+                );
+              })}
+            </Box>
+          ) : null}
+        </Stack>
 
         {isCreatedByUser && meme.status === "draft" ? (
           <Box padding={2} display={"flex"}>

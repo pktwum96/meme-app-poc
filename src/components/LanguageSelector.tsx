@@ -2,6 +2,7 @@ import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Dispatch, SetStateAction } from "react";
 import { LanguageOption, languages } from "../assets/data/languages";
+import { retrieveLanguageFromList } from "../helpers/utils";
 
 const filter = createFilterOptions<LanguageOption>();
 
@@ -14,9 +15,9 @@ export default function LanguageSelector({
   setSelectedLanguages,
 }: LanguageSelectorProps) {
   const formattedSelected = selectedLanguages.map((selected) => {
-    const listedLang = languages.find((lang) => lang.code === selected);
-
-    return listedLang || { code: selected, name: selected };
+    return (
+      retrieveLanguageFromList(selected) || { code: selected, name: selected }
+    );
   });
   return (
     <Autocomplete
