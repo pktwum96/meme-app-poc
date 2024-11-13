@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "../supabase/database.types";
-import { Meme, MemeInsert } from "../supabase/types";
+import { Meme, MemeInsert, MemeUpdate } from "../supabase/types";
 
 export const getAllMemes = (client: SupabaseClient<Database>) => {
   return client.from("memes").select("*").eq("status", "published");
@@ -53,6 +53,25 @@ export const createMemeInDatabase = (
   meme: MemeInsert
 ) => {
   return client.from("memes").insert(meme).select("*").single();
+};
+
+export const updateMeme = (
+  client: SupabaseClient<Database>,
+  meme: MemeUpdate
+) => {
+  return client
+    .from("memes")
+    .update(meme)
+    .eq("id", `${meme.id}`)
+    .select("*")
+    .single();
+};
+
+export const deleteMeme = (
+  client: SupabaseClient<Database>,
+  meme: MemeUpdate
+) => {
+  return client.from("memes").delete().eq("id", `${meme.id}`);
 };
 
 export const submitMemeForReview = (

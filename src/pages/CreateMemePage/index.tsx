@@ -1,10 +1,14 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { isString } from "lodash";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -17,15 +21,21 @@ import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import {
   createMemeInDatabase,
+  updateMeme,
   uploadMemeToSupabase,
 } from "../../queries/memes";
-import { Meme, MemeWithTags } from "../../supabase/types";
+import { Meme, MemeUpdate, MemeWithTags } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
 export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
   const [selectedFile, setSelectedFile] = useState<File | string | undefined>(
     meme?.media_url
   );
+
+  const fileURLForRender =
+    selectedFile && typeof selectedFile !== "string"
+      ? URL.createObjectURL(selectedFile)
+      : selectedFile;
 
   const [title, setTitle] = useState(meme?.title || "");
   const [description, setDescription] = useState(meme?.description || "");
@@ -41,74 +51,109 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
   }, [meme]);
 
   const navigate = useNavigate();
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
   const { setIsLoading } = useFullScreenLoading();
   const { user } = useUser();
 
   const { supabaseClient: supabase } = useSessionContext();
-  // Handle form submission
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const uploadFile = async (file: File) => {
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const mediaType = file.type;
+    const filePath = `public/${user?.id || "unknown"}/${fileName}`;
+    const { error } = await uploadMemeToSupabase(supabase, file, filePath);
 
-    if (!selectedFile || !title) {
-      return;
-    }
-    setIsLoading(true);
+    if (error) throw error;
 
-    try {
-      let mediaUrl = meme?.media_url || "";
-      let filePath = meme?.media_path;
-      let mediaType = meme?.media_type;
-      if (!isString(selectedFile)) {
-        // Upload file to Supabase storage
-        const fileExt = selectedFile.name.split(".").pop();
-        const fileName = `${Date.now()}.${fileExt}`;
-        mediaType = selectedFile.type;
-        filePath = `public/${fileName}`;
-        const { error } = await uploadMemeToSupabase(
-          supabase,
-          selectedFile,
-          filePath
-        );
+    const mediaUrl = supabase.storage.from("Meme_Bucket").getPublicUrl(filePath)
+      .data.publicUrl;
+    return { mediaType, mediaUrl, filePath };
+  };
 
-        if (error) {
-          throw error;
-        }
-        mediaUrl = supabase.storage.from("Meme_Bucket").getPublicUrl(filePath)
-          .data.publicUrl;
-      }
-      // Insert meme data into the memes table
+  const createNewMeme = async (file: File) => {
+    const { mediaUrl, filePath, mediaType } = await uploadFile(file);
+    const newMemeData = {
+      title,
+      description,
+      media_url: mediaUrl,
+      media_path: filePath,
+      media_type: mediaType,
+      created_by: user!.id,
+      status: "draft" as Meme["status"],
+      languages,
+    };
 
-      const uploadMeme = {
-        title,
-        description,
-        media_url: mediaUrl, // Full public URL for frontend use
+    const { data, error } = await createMemeInDatabase(supabase, newMemeData);
+    if (error) throw error;
+
+    toast.success("Meme uploaded successfully!");
+    return data;
+  };
+
+  const updateExistingMeme = async (meme: Meme, file?: File) => {
+    const updatedInfo: MemeUpdate = {
+      id: meme.id,
+      title,
+      description,
+      languages,
+      created_by: user!.id,
+    };
+
+    if (file) {
+      const { mediaUrl, filePath, mediaType } = await uploadFile(file);
+      Object.assign(updatedInfo, {
+        media_url: mediaUrl,
         media_path: filePath,
         media_type: mediaType,
-        created_by: user!.id, // Assumes user is authenticated
-        status: "draft" as Meme["status"], // Default status
-        languages,
-      };
-      const { data, error: dbError } = await createMemeInDatabase(
-        supabase,
-        uploadMeme
-      );
+      });
+    }
 
-      if (dbError) {
-        throw dbError;
+    const { data, error } = await updateMeme(supabase, updatedInfo);
+    if (error) throw error;
+
+    toast.success("Meme updated successfully!");
+    return data;
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedFile || !title) {
+      toast("Please provide a title and media for the meme.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      let data;
+      if (!meme) {
+        // Creating a new meme
+        data = await createNewMeme(selectedFile as File);
+      } else {
+        // Updating an existing meme
+        data = await updateExistingMeme(
+          meme,
+          typeof selectedFile !== "string" ? selectedFile : undefined
+        );
       }
 
-      setIsLoading(false);
-      toast.success("Meme uploaded successfully!");
-      setSelectedFile(undefined);
-      setTitle("");
-      setDescription("");
-      if (data) {
-        navigate(`/meme/${data.id}`, { state: { meme: data } });
-      }
+      if (data) navigate(`/meme/${data.id}`, { state: { meme: data } });
     } catch (error) {
       toast.error((error as Error).message);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+  const onCancelConfirm = () => {
+    navigate("/my-memes");
   };
   return (
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
@@ -117,10 +162,14 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
       </Text>
       <Box role="form" component="form" paddingTop={2} onSubmit={handleSubmit}>
         <Stack spacing={2}>
-          {typeof selectedFile === "string" ? (
+          {fileURLForRender ? (
             <MediaRenderer
-              type={meme?.media_type || ""}
-              src={selectedFile}
+              type={
+                selectedFile && typeof selectedFile !== "string"
+                  ? selectedFile.type
+                  : meme?.media_type || ""
+              }
+              src={fileURLForRender}
               alt={meme?.title || ""}
             />
           ) : (
@@ -161,12 +210,36 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
             <ContainedButton size="large" sx={{ flex: 1 }} type="submit">
               Save
             </ContainedButton>
-            <Button variant="outlined" onClick={() => navigate("/my-memes")}>
+            <Button variant="outlined" onClick={handleClickOpen}>
               Cancel
             </Button>
           </Stack>
         </Stack>
       </Box>
+
+      <Dialog
+        open={dialogOpen}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Cancel without saving?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to cancel without saving changes?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Go Back
+          </Button>
+          <Button color="error" onClick={onCancelConfirm}>
+            Cancel Changes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

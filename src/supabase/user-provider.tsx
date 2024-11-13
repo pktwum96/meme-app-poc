@@ -6,7 +6,7 @@ import {
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useFullScreenLoading } from "../contexts/loading";
-import { getUserDetails, getUserPreferences } from "../queries/users";
+import { getUserDetails } from "../queries/users";
 import { UserDetails, UserPreferences } from "./types";
 
 type UserContextType = {
@@ -38,8 +38,7 @@ export const UserProvider = (props: PropsWithChildren) => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
   const { setIsLoading } = useFullScreenLoading();
-  const [userPreferences, setUserPreferences] =
-    useState<UserPreferences | null>(null);
+  const [userPreferences] = useState<UserPreferences | null>(null);
 
   const [hasError, setHasError] = useState(false); // Track error state
 
@@ -62,28 +61,28 @@ export const UserProvider = (props: PropsWithChildren) => {
       } else return null;
     };
 
-    const getUserPreferencesFromDatabase = async () => {
-      if (user) {
-        const { data, error } = await getUserPreferences(supabase, user.id);
-        if (error) {
-          return null;
-        }
-        return data as UserPreferences;
-      } else {
-        return null;
-      }
-    };
+    // const getUserPreferencesFromDatabase = async () => {
+    //   if (user) {
+    //     const { data, error } = await getUserPreferences(supabase, user.id);
+    //     if (error) {
+    //       return null;
+    //     }
+    //     return data as UserPreferences;
+    //   } else {
+    //     return null;
+    //   }
+    // };
     const fetchUserDetails = async () => {
       if (user && !isLoadingData && !userDetails && !hasError) {
         setIsLoadingData(true);
         setIsLoading(true);
-        const [details, preferences] = await Promise.all([
+        const [details] = await Promise.all([
           getUserDetailsFromDatabase(),
-          getUserPreferencesFromDatabase(),
+          // getUserPreferencesFromDatabase(),
         ]);
 
         if (details) setUserDetails(details);
-        if (preferences) setUserPreferences(preferences);
+        // if (preferences) setUserPreferences(preferences);
 
         setIsLoadingData(false);
         setIsLoading(false);

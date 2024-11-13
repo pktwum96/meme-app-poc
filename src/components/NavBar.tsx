@@ -61,19 +61,22 @@ function NavBar() {
               display: "flex",
               alignItems: "center",
             }}
-            onClick={() => {
-              navigate("/");
-            }}
           >
             <Box
               component={"img"}
               sx={{ height: "100%", padding: 2 }}
               src={theme.palette.mode === "dark" ? LogoDark : Logo}
+              onClick={() => {
+                navigate("/");
+              }}
             />
             <Typography
               sx={{ display: { xs: "none", md: "block" } }}
               fontFamily={"Alumni Sans"}
               variant="h5"
+              onClick={() => {
+                navigate("/");
+              }}
             >
               jollof memes
             </Typography>

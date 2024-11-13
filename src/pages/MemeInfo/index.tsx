@@ -1,11 +1,18 @@
 import { Delete, Edit } from "@mui/icons-material";
 import LanguageIcon from "@mui/icons-material/Language";
-import { Divider, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { merge } from "lodash";
 import { useEffect, useState } from "react";
@@ -19,7 +26,11 @@ import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import { useTheme } from "../../contexts/theme";
 import { isMemeDraft, retrieveLanguageFromList } from "../../helpers/utils";
-import { getMemeById, submitMemeForReview } from "../../queries/memes";
+import {
+  deleteMeme,
+  getMemeById,
+  submitMemeForReview,
+} from "../../queries/memes";
 import { MemeWithTags } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
@@ -35,6 +46,16 @@ export const MemeInfoPage = () => {
   const { setIsLoading } = useFullScreenLoading();
 
   const { theme } = useTheme();
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
   useEffect(() => {
     const fetchMeme = async () => {
       setIsLoading(true);
@@ -90,6 +111,26 @@ export const MemeInfoPage = () => {
 
     setIsLoading(false);
   };
+
+  const onDeleteConfirm = async () => {
+    setIsLoading(true);
+
+    try {
+      if (meme) {
+        const { error } = await deleteMeme(supabaseClient, meme);
+
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        navigate("/my-memes");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      toast.error((error as Error).message);
+    }
+    setIsLoading(false);
+  };
   if (!meme) {
     return "Meme not found";
   }
@@ -112,6 +153,7 @@ export const MemeInfoPage = () => {
                 <ResponsiveIconButton
                   label={"Delete"}
                   icon={<Delete />}
+                  onClick={handleClickOpen}
                   color="error"
                   size="small"
                 />
@@ -152,9 +194,13 @@ export const MemeInfoPage = () => {
 
               {meme.languages.map((langCode, index, array) => {
                 const languageText =
-                  retrieveLanguageFromList(langCode)?.name || "";
+                  retrieveLanguageFromList(langCode)?.name || langCode;
                 return (
-                  <Typography variant="body2" paddingRight={1}>
+                  <Typography
+                    key={languageText}
+                    variant="body2"
+                    paddingRight={1}
+                  >
                     {languageText}
                     {index !== array.length - 1 ? ", " : ""}
                   </Typography>
@@ -175,6 +221,28 @@ export const MemeInfoPage = () => {
           </Box>
         ) : null}
       </Card>
+
+      <Dialog
+        open={dialogOpen}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Delete Draft?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this meme? This is not reversible.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Go Back
+          </Button>
+          <Button color="error" onClick={onDeleteConfirm}>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
