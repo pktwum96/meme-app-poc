@@ -1,3 +1,5 @@
+import { CloseOutlined } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -9,9 +11,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import CharacterSelector from "../../components/CharacterSelector";
 import { ContainedButton } from "../../components/ContainedButton";
 import FileUploadArea from "../../components/FileUploadArea";
 import LanguageSelector from "../../components/LanguageSelector";
@@ -20,11 +23,10 @@ import TagsSelector from "../../components/TagsSelector";
 import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import {
-  createMemeInDatabase,
-  updateMeme,
+  createOrUpdateMemeInDatabase,
   uploadMemeToSupabase,
 } from "../../queries/memes";
-import { Meme, MemeUpdate, MemeWithTags } from "../../supabase/types";
+import { Meme, MemeWithTags } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
 export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
@@ -41,12 +43,18 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
   const [description, setDescription] = useState(meme?.description || "");
   const [tags, setTags] = useState(meme?.tags || []);
   const [languages, setLanguages] = useState<string[]>(meme?.languages || []);
+  const [selectedCharacters, setSelectedCharacters] = useState(
+    meme?.characters || []
+  );
+
   useEffect(() => {
     if (meme) {
       setTitle(meme.title);
       setDescription(meme.description || "");
       setLanguages(meme.languages || []);
       setSelectedFile(meme.media_url);
+      setTags(meme.tags);
+      setSelectedCharacters(meme.characters);
     }
   }, [meme]);
 
@@ -90,22 +98,30 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
       created_by: user!.id,
       status: "draft" as Meme["status"],
       languages,
+      created_at: null,
+      tags,
     };
 
-    const { data, error } = await createMemeInDatabase(supabase, newMemeData);
+    const { data, error } = await createOrUpdateMemeInDatabase(supabase, {
+      ...newMemeData,
+      characters: [],
+    });
     if (error) throw error;
 
     toast.success("Meme uploaded successfully!");
     return data;
   };
 
-  const updateExistingMeme = async (meme: Meme, file?: File) => {
-    const updatedInfo: MemeUpdate = {
+  const updateExistingMeme = async (meme: MemeWithTags, file?: File) => {
+    const updatedInfo: MemeWithTags = {
+      ...meme,
       id: meme.id,
       title,
       description,
       languages,
       created_by: user!.id,
+      status: "draft" as Meme["status"],
+      tags: tags,
     };
 
     if (file) {
@@ -117,17 +133,21 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
       });
     }
 
-    const { data, error } = await updateMeme(supabase, updatedInfo);
+    const { data, error } = await createOrUpdateMemeInDatabase(
+      supabase,
+      updatedInfo
+    );
+
     if (error) throw error;
 
     toast.success("Meme updated successfully!");
     return data;
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!selectedFile || !title) {
-      toast("Please provide a title and media for the meme.");
+      toast.error("Please provide a title and media for the meme.");
       return;
     }
 
@@ -144,8 +164,22 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
           typeof selectedFile !== "string" ? selectedFile : undefined
         );
       }
-
-      if (data) navigate(`/meme/${data.id}`, { state: { meme: data } });
+      if (data) {
+        const newMeme = {
+          ...meme,
+          id: data.returned_meme_id,
+          title: data.returned_title,
+          description: data.returned_description,
+          media_url: data.returned_media_url,
+          media_path: data.returned_media_path,
+          media_type: data.returned_media_type,
+          status: data.returned_status,
+          created_by: data.returned_created_by,
+          languages: data.returned_languages,
+          tags: data.returned_tags,
+        };
+        navigate(`/meme/${newMeme.id}`, { state: { meme: newMeme } });
+      }
     } catch (error) {
       toast.error((error as Error).message);
     } finally {
@@ -155,23 +189,34 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
   const onCancelConfirm = () => {
     navigate("/my-memes");
   };
+
   return (
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
       <Text variant="h3" textAlign={"center"}>
         Upload your meme
       </Text>
-      <Box role="form" component="form" paddingTop={2} onSubmit={handleSubmit}>
+      <Box role="form" component="form" paddingTop={2}>
         <Stack spacing={2}>
           {fileURLForRender ? (
-            <MediaRenderer
-              type={
-                selectedFile && typeof selectedFile !== "string"
-                  ? selectedFile.type
-                  : meme?.media_type || ""
-              }
-              src={fileURLForRender}
-              alt={meme?.title || ""}
-            />
+            <Box position={"relative"}>
+              <MediaRenderer
+                type={
+                  selectedFile && typeof selectedFile !== "string"
+                    ? selectedFile.type
+                    : meme?.media_type || ""
+                }
+                src={fileURLForRender}
+                alt={meme?.title || ""}
+              />
+              <IconButton
+                sx={{ position: "absolute", top: "10px", right: "10px" }}
+                onClick={() => {
+                  setSelectedFile(undefined);
+                }}
+              >
+                <CloseOutlined />
+              </IconButton>
+            </Box>
           ) : (
             <FileUploadArea {...{ selectedFile, setSelectedFile }} />
           )}
@@ -205,9 +250,22 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
               setSelectedLanguages={setLanguages}
             />
           </Stack>
+          <Stack
+            spacing={2}
+            direction={{ xs: "column", md: "row" }}
+            width={"100%"}
+          >
+            <CharacterSelector
+              {...{ selectedCharacters, setSelectedCharacters }}
+            />
+          </Stack>
 
           <Stack direction={"row"} gap={2}>
-            <ContainedButton size="large" sx={{ flex: 1 }} type="submit">
+            <ContainedButton
+              size="large"
+              sx={{ flex: 1 }}
+              onClick={handleSubmit}
+            >
               Save
             </ContainedButton>
             <Button variant="outlined" onClick={handleClickOpen}>

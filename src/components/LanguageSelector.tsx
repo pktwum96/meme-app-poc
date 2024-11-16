@@ -19,6 +19,7 @@ export default function LanguageSelector({
       retrieveLanguageFromList(selected) || { code: selected, name: selected }
     );
   });
+
   return (
     <Autocomplete
       value={formattedSelected}
@@ -61,11 +62,7 @@ export default function LanguageSelector({
         return option.name;
       }}
       renderOption={(props, option) => {
-        return (
-          <li key={option.code} {...props}>
-            {option.name}
-          </li>
-        );
+        return <li {...props}>{option.name}</li>;
       }}
       sx={{ flex: 1 }}
       freeSolo

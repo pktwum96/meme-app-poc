@@ -7,22 +7,30 @@ import { getAllMyMemes } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import { capitalize, groupBy } from "lodash";
+import { useNavigate } from "react-router-dom";
+import { ContainedButton } from "../../components/ContainedButton";
 import Text from "../../components/Text";
+import { useTheme } from "../../contexts/theme";
 
 export const MyMemes = () => {
-  const [memeList, setMemeList] = useState<Meme[]>([]);
+  const [memeList, setMemeList] = useState<Meme[] | undefined>(undefined);
 
   const { supabaseClient } = useSessionContext();
   const { userDetails } = useUser();
 
   const userId = userDetails?.id;
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchMemes = async () => {
       if (userId) {
         try {
           const { data, error } = await getAllMyMemes(supabaseClient, userId);
+
           if (error) {
             throw error;
           }
@@ -37,19 +45,45 @@ export const MyMemes = () => {
     fetchMemes();
   }, [userId, supabaseClient]);
 
+  const { theme } = useTheme();
+
+  if (memeList == undefined) {
+    return <>Loading</>;
+  }
   const arrangedMemes = groupBy(memeList, ({ status }) => status);
   return (
     <Container maxWidth="xl">
-      {Object.keys(arrangedMemes).map((memeStatus) => {
-        return (
-          <Fragment key={memeStatus}>
-            <Text variant="h6" padding={2} paddingTop={3}>
-              {capitalize(memeStatus)}
-            </Text>
-            <MemeList memes={arrangedMemes[memeStatus]} />
-          </Fragment>
-        );
-      })}
+      {memeList.length ? (
+        Object.keys(arrangedMemes).map((memeStatus) => {
+          return (
+            <Fragment key={memeStatus}>
+              <Text variant="h6" padding={2} paddingTop={3}>
+                {capitalize(memeStatus)}
+              </Text>
+              <MemeList memes={arrangedMemes[memeStatus]} />
+            </Fragment>
+          );
+        })
+      ) : (
+        <Box
+          height={"70vh"}
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <Stack
+            padding={4}
+            justifyContent={"center"}
+            border={`${theme.palette.divider} 2px dashed`}
+            borderRadius={4}
+          >
+            <Text padding={6}>Nothing in here... yet... </Text>
+            <ContainedButton onClick={() => navigate("/meme/create")}>
+              Create a meme
+            </ContainedButton>
+          </Stack>
+        </Box>
+      )}
     </Container>
   );
 };

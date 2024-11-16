@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "../supabase/database.types";
-import { Meme, MemeInsert, MemeUpdate } from "../supabase/types";
+import { Meme, MemeUpdate, MemeWithTags } from "../supabase/types";
 
 export const getAllMemes = (client: SupabaseClient<Database>) => {
   return client.from("memes").select("*").eq("status", "published");
@@ -14,7 +14,8 @@ export const getMemeById = (
     .from("memes")
     .select(
       `*,
-      tags (name)`
+      tags (name),
+      characters (*)`
     )
     .eq("id", memeId)
     .single();
@@ -48,22 +49,23 @@ export const uploadMemeToSupabase = (
     .upload(filePath, selectedFile);
 };
 
-export const createMemeInDatabase = (
+export const createOrUpdateMemeInDatabase = (
   client: SupabaseClient<Database>,
-  meme: MemeInsert
-) => {
-  return client.from("memes").insert(meme).select("*").single();
-};
 
-export const updateMeme = (
-  client: SupabaseClient<Database>,
-  meme: MemeUpdate
+  meme: Omit<MemeWithTags, "id"> & { id?: string }
 ) => {
   return client
-    .from("memes")
-    .update(meme)
-    .eq("id", `${meme.id}`)
-    .select("*")
+    .rpc("insert_or_update_meme", {
+      p_created_by: meme.created_by,
+      p_description: meme.description,
+      p_title: meme.title,
+      p_languages: meme.languages || [],
+      p_media_path: meme.media_path,
+      p_media_type: meme.media_type,
+      p_media_url: meme.media_url,
+      p_meme_id: meme.id,
+      p_tags: meme.tags,
+    })
     .single();
 };
 

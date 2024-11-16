@@ -25,7 +25,11 @@ import { StatusChip } from "../../components/StatusChip";
 import Text from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import { useTheme } from "../../contexts/theme";
-import { isMemeDraft, retrieveLanguageFromList } from "../../helpers/utils";
+import {
+  isMemeDraft,
+  isMemeRejected,
+  retrieveLanguageFromList,
+} from "../../helpers/utils";
 import {
   deleteMeme,
   getMemeById,
@@ -148,7 +152,7 @@ export const MemeInfoPage = () => {
               size="small"
               sx={{ mx: 1 }}
             />
-            {isMemeDraft(meme) ? (
+            {isMemeDraft(meme) || isMemeRejected(meme) ? (
               <Stack direction="row" spacing={1} marginLeft={"auto"}>
                 <ResponsiveIconButton
                   label={"Delete"}

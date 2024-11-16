@@ -16,6 +16,10 @@ export const isMemeDraft = (meme: Meme) => {
   return meme.status === "draft";
 };
 
+export const isMemeRejected = (meme: Meme) => {
+  return meme.status === "rejected";
+};
+
 export const isMemeInReview = (meme: Meme) => {
   return meme.status === "review";
 };

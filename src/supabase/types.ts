@@ -5,9 +5,11 @@ export type UserDetails = Tables<"users">;
 export type UserPreferences = Tables<"user_preferences">;
 export type Meme = Tables<"memes">;
 export type Review = Tables<"reviews">;
+export type Character = Tables<"characters">;
 
 export type MemeWithTags = Tables<"memes"> & {
   tags: string[];
+  characters: Character[];
 };
 
 // Insert Data
