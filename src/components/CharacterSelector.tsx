@@ -1,6 +1,5 @@
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -11,14 +10,18 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
-import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { getAllCharacters } from "../queries/tags";
 import { Character } from "../supabase/types";
+import { HighlightMatchTextRenderer } from "./HighlightMatchTextRenderer";
 
 const filter = createFilterOptions<Character>({
   stringify: (option: Character) => option.name + option.aliases?.join(" "),
@@ -45,6 +48,14 @@ export default function CharacterSelector({
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Character[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const [stateSelected, setStateSelected] = useState(selectedCharacters || []);
+
+  useEffect(() => {
+    if (selectedCharacters) {
+      setStateSelected(selectedCharacters);
+    }
+  }, [selectedCharacters]);
 
   const [dialogValue, setDialogValue] = useState<Character>(emptyCharacter);
 
@@ -93,9 +104,10 @@ export default function CharacterSelector({
   return (
     <>
       <Autocomplete
-        value={selectedCharacters}
+        value={stateSelected}
         open={open}
         onInputChange={(_event, newInputValue) => {
+          console.log("here");
           setInputValue(newInputValue);
         }}
         multiple
@@ -138,7 +150,7 @@ export default function CharacterSelector({
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
-        options={options}
+        options={options || []}
         getOptionLabel={(option) => {
           // Value selected with enter, right from the input
           if (typeof option === "string") {
@@ -148,11 +160,6 @@ export default function CharacterSelector({
           return option.name;
         }}
         renderOption={(props, option) => {
-          const nameMatches = match(option.name, inputValue, {
-            insideWords: true,
-          });
-          const parts = parse(option.name, nameMatches);
-
           return (
             <ListItem {...props} alignItems="flex-start">
               <ListItemAvatar>
@@ -163,54 +170,16 @@ export default function CharacterSelector({
               </ListItemAvatar>
               <ListItemText
                 primary={
-                  <>
-                    {parts.map((part, index) => {
-                      return (
-                        <Box
-                          component={"span"}
-                          key={part.text + index}
-                          sx={{
-                            fontWeight: part.highlight ? "bold" : "regular",
-                          }}
-                        >
-                          {part.text}
-                        </Box>
-                      );
-                    })}
-                  </>
+                  <HighlightMatchTextRenderer
+                    inputValue={inputValue}
+                    textToMatch={option.name}
+                  />
                 }
                 secondary={
-                  <>
-                    {option.aliases?.map((alias, index, array) => {
-                      const aliasMatches = match(alias, inputValue, {
-                        insideWords: true,
-                      });
-                      const aliasParts = parse(alias, aliasMatches);
-                      return (
-                        <>
-                          {aliasParts.map((aliasPart, partIndex) => {
-                            return (
-                              <Typography
-                                sx={{
-                                  display: "inline",
-                                  fontWeight: aliasPart.highlight
-                                    ? "bold"
-                                    : "regular",
-                                }}
-                                component="span"
-                                variant="body2"
-                                color="text.primary"
-                                key={alias + index + partIndex}
-                              >
-                                {aliasPart.text}
-                              </Typography>
-                            );
-                          })}
-                          {index !== array.length - 1 ? ", " : ""}
-                        </>
-                      );
-                    })}
-                  </>
+                  <HighlightMatchTextRenderer
+                    inputValue={inputValue}
+                    textToMatch={option.aliases?.join(", ") || ""}
+                  />
                 }
               />
             </ListItem>

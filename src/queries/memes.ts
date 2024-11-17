@@ -14,8 +14,7 @@ export const getMemeById = (
     .from("memes")
     .select(
       `*,
-      tags (name),
-      characters (*)`
+      tags (name)`
     )
     .eq("id", memeId)
     .single();
@@ -55,7 +54,7 @@ export const createOrUpdateMemeInDatabase = (
   meme: Omit<MemeWithTags, "id"> & { id?: string }
 ) => {
   return client
-    .rpc("insert_or_update_meme", {
+    .rpc("submit_meme_with_characters_v3", {
       p_created_by: meme.created_by,
       p_description: meme.description,
       p_title: meme.title,
@@ -65,6 +64,7 @@ export const createOrUpdateMemeInDatabase = (
       p_media_url: meme.media_url,
       p_meme_id: meme.id,
       p_tags: meme.tags,
+      p_characters: meme.characters,
     })
     .single();
 };

@@ -1,13 +1,11 @@
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
 import { Dispatch, Fragment, useState } from "react";
 import toast from "react-hot-toast";
 import { getAllTags } from "../queries/tags";
+import { HighlightMatchTextRenderer } from "./HighlightMatchTextRenderer";
 
 const filter = createFilterOptions<string>();
 
@@ -102,23 +100,12 @@ export default function TagsSelector({
         />
       )}
       renderOption={(props, option) => {
-        const matches = match(option, inputValue, { insideWords: true });
-
-        const parts = parse(option, matches);
-
         return (
           <li {...props}>
-            {parts.map((part, index) => (
-              <Box
-                key={index}
-                component="span"
-                sx={{
-                  fontWeight: part.highlight ? "bold" : "regular",
-                }}
-              >
-                {part.text}
-              </Box>
-            ))}
+            <HighlightMatchTextRenderer
+              inputValue={inputValue}
+              textToMatch={option}
+            />
           </li>
         );
       }}

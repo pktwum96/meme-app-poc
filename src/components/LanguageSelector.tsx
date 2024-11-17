@@ -1,8 +1,9 @@
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { LanguageOption, languages } from "../assets/data/languages";
 import { retrieveLanguageFromList } from "../helpers/utils";
+import { HighlightMatchTextRenderer } from "./HighlightMatchTextRenderer";
 
 const filter = createFilterOptions<LanguageOption>();
 
@@ -14,16 +15,31 @@ export default function LanguageSelector({
   selectedLanguages,
   setSelectedLanguages,
 }: LanguageSelectorProps) {
-  const formattedSelected = selectedLanguages.map((selected) => {
-    return (
-      retrieveLanguageFromList(selected) || { code: selected, name: selected }
-    );
-  });
+  const [inputValue, setInputValue] = useState("");
+
+  const [stateSelected, setstateSelected] = useState<
+    {
+      code: string;
+      name: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const formattedSelected = selectedLanguages.map((selected) => {
+      return (
+        retrieveLanguageFromList(selected) || { code: selected, name: selected }
+      );
+    });
+    setstateSelected(formattedSelected);
+  }, [selectedLanguages]);
 
   return (
     <Autocomplete
-      value={formattedSelected}
+      value={stateSelected}
       multiple
+      onInputChange={(_event, newInputValue) => {
+        setInputValue(newInputValue);
+      }}
       onChange={(_event, newValues) => {
         const newLanguages = newValues.map((val) => {
           if (typeof val === "string") {
@@ -37,7 +53,6 @@ export default function LanguageSelector({
       filterOptions={(options, params) => {
         const filtered = filter(options, params);
 
-        const { inputValue } = params;
         // Suggest the creation of a new value
         const isExisting = options.some((option) => inputValue === option.name);
         if (inputValue !== "" && !isExisting) {
@@ -62,7 +77,14 @@ export default function LanguageSelector({
         return option.name;
       }}
       renderOption={(props, option) => {
-        return <li {...props}>{option.name}</li>;
+        return (
+          <li {...props}>
+            <HighlightMatchTextRenderer
+              inputValue={inputValue}
+              textToMatch={option.name}
+            />
+          </li>
+        );
       }}
       sx={{ flex: 1 }}
       freeSolo

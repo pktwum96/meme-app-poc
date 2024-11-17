@@ -73,6 +73,7 @@ export const MemeInfoPage = () => {
 
           if (data) {
             const memeData = {
+              characters: [],
               ...data,
               tags: data.tags.map((tag: { name: string }) => tag.name),
             };

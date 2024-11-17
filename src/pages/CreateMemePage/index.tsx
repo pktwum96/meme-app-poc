@@ -103,8 +103,8 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
     };
 
     const { data, error } = await createOrUpdateMemeInDatabase(supabase, {
-      ...newMemeData,
       characters: [],
+      ...newMemeData,
     });
     if (error) throw error;
 
