@@ -100,10 +100,10 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
       languages,
       created_at: null,
       tags,
+      characters: selectedCharacters,
     };
 
     const { data, error } = await createOrUpdateMemeInDatabase(supabase, {
-      characters: [],
       ...newMemeData,
     });
     if (error) throw error;
@@ -122,6 +122,7 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
       created_by: user!.id,
       status: "draft" as Meme["status"],
       tags: tags,
+      characters: selectedCharacters,
     };
 
     if (file) {
@@ -177,6 +178,7 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
           created_by: data.returned_created_by,
           languages: data.returned_languages,
           tags: data.returned_tags,
+          characters: data.returned_characters,
         };
         navigate(`/meme/${newMeme.id}`, { state: { meme: newMeme } });
       }

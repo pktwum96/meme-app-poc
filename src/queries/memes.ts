@@ -14,7 +14,8 @@ export const getMemeById = (
     .from("memes")
     .select(
       `*,
-      tags (name)`
+      tags (name),
+      characters (*)`
     )
     .eq("id", memeId)
     .single();
@@ -50,11 +51,10 @@ export const uploadMemeToSupabase = (
 
 export const createOrUpdateMemeInDatabase = (
   client: SupabaseClient<Database>,
-
   meme: Omit<MemeWithTags, "id"> & { id?: string }
 ) => {
   return client
-    .rpc("submit_meme_with_characters_v3", {
+    .rpc("insert_or_update_meme_v4", {
       p_created_by: meme.created_by,
       p_description: meme.description,
       p_title: meme.title,

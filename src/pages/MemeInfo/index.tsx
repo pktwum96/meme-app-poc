@@ -1,5 +1,6 @@
 import { Delete, Edit } from "@mui/icons-material";
 import LanguageIcon from "@mui/icons-material/Language";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -73,7 +74,6 @@ export const MemeInfoPage = () => {
 
           if (data) {
             const memeData = {
-              characters: [],
               ...data,
               tags: data.tags.map((tag: { name: string }) => tag.name),
             };
@@ -139,37 +139,52 @@ export const MemeInfoPage = () => {
   if (!meme) {
     return "Meme not found";
   }
+
   return (
     <Container sx={{ paddingY: 3 }}>
       <Card sx={{ p: "1.5rem" }}>
         {isCreatedByUser ? (
-          <Stack direction="row" paddingBottom={"1.5rem"} alignItems={"center"}>
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            paddingBottom={"1.5rem"}
+          >
             <Text fontWeight={theme.typography.fontWeightBold} variant="h5">
               {meme?.title}
             </Text>
-            <StatusChip
-              status={meme.status}
-              label={meme.status.toLocaleUpperCase()}
-              size="small"
-              sx={{ mx: 1 }}
-            />
-            {isMemeDraft(meme) || isMemeRejected(meme) ? (
-              <Stack direction="row" spacing={1} marginLeft={"auto"}>
-                <ResponsiveIconButton
-                  label={"Delete"}
-                  icon={<Delete />}
-                  onClick={handleClickOpen}
-                  color="error"
-                  size="small"
-                />
-                <ResponsiveIconButton
-                  onClick={() => navigate(`/meme/${memeId}/edit`)}
-                  label={"Edit"}
-                  icon={<Edit />}
-                  size="small"
-                />
-              </Stack>
-            ) : null}
+            <Stack
+              direction="row"
+              alignItems={"center"}
+              marginLeft={{ md: "auto" }}
+              marginTop={{ md: 0, xs: 2 }}
+            >
+              <StatusChip
+                status={meme.status}
+                label={meme.status.toLocaleUpperCase()}
+                size="small"
+              />
+              {isMemeDraft(meme) || isMemeRejected(meme) ? (
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  paddingLeft={1}
+                  marginLeft={"auto"}
+                >
+                  <ResponsiveIconButton
+                    label={"Delete"}
+                    icon={<Delete />}
+                    onClick={handleClickOpen}
+                    color="error"
+                    size="small"
+                  />
+                  <ResponsiveIconButton
+                    onClick={() => navigate(`/meme/${memeId}/edit`)}
+                    label={"Edit"}
+                    icon={<Edit />}
+                    size="small"
+                  />
+                </Stack>
+              ) : null}
+            </Stack>
           </Stack>
         ) : null}
 
@@ -192,7 +207,14 @@ export const MemeInfoPage = () => {
 
         <Divider />
 
-        <Stack>
+        <Stack gap={{ me: 4, xs: 1 }} direction={{ md: "row", xs: "column" }}>
+          {meme.characters?.length ? (
+            <Box display={"flex"} alignItems={"center"}>
+              <PeopleAltIcon sx={{ margin: 1 }} fontSize="small" />
+
+              {meme.characters.map((char) => char.name).join(", ")}
+            </Box>
+          ) : null}
           {meme.languages?.length ? (
             <Box display={"flex"} alignItems={"center"}>
               <LanguageIcon sx={{ margin: 1 }} fontSize="small" />

@@ -105,9 +105,9 @@ export default function CharacterSelector({
     <>
       <Autocomplete
         value={stateSelected}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         open={open}
         onInputChange={(_event, newInputValue) => {
-          console.log("here");
           setInputValue(newInputValue);
         }}
         multiple
@@ -193,7 +193,7 @@ export default function CharacterSelector({
         <DialogContent>
           <Stack gap={2} marginTop={2}>
             <TextField
-              autoFocus
+              autoFocus={open}
               id="name"
               value={dialogValue?.name}
               onChange={(event) =>
