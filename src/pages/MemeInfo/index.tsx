@@ -139,7 +139,6 @@ export const MemeInfoPage = () => {
   if (!meme) {
     return "Meme not found";
   }
-
   return (
     <Container sx={{ paddingY: 3 }}>
       <Card sx={{ p: "1.5rem" }}>
@@ -193,21 +192,27 @@ export const MemeInfoPage = () => {
           type={meme.media_type!}
           src={meme.media_url!}
         />
-        <Text sx={{ padding: "1rem" }} variant="body1">
+        <Text sx={{ paddingY: "1rem" }} variant="body1">
           {meme?.description}
         </Text>
 
         {meme.tags?.length ? (
           <Stack paddingBottom={"1rem"} direction={"row"}>
             {meme.tags?.map((tag) => {
-              return <Chip key={tag} label={`# ${tag}`} />;
+              return (
+                <Chip key={tag} sx={{ marginRight: 1 }} label={`# ${tag}`} />
+              );
             })}
           </Stack>
         ) : null}
 
         <Divider />
 
-        <Stack gap={{ me: 4, xs: 1 }} direction={{ md: "row", xs: "column" }}>
+        <Stack
+          py={1}
+          gap={{ me: 4, xs: 1 }}
+          direction={{ md: "row", xs: "column" }}
+        >
           {meme.characters?.length ? (
             <Box display={"flex"} alignItems={"center"}>
               <PeopleAltIcon sx={{ margin: 1 }} fontSize="small" />
