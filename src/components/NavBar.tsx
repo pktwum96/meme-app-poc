@@ -78,7 +78,7 @@ function NavBar() {
                 navigate("/");
               }}
             >
-              jollof memes
+              The Meme Finder
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
