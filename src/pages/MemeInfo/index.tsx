@@ -23,7 +23,7 @@ import { ContainedButton } from "../../components/ContainedButton";
 import { MediaRenderer } from "../../components/MediaRenderer";
 import { ResponsiveIconButton } from "../../components/ResponsiveIconButton";
 import { StatusChip } from "../../components/StatusChip";
-import Text from "../../components/Text";
+import { Text } from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import { useTheme } from "../../contexts/theme";
 import {

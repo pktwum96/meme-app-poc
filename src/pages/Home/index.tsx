@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { ContainedButton } from "../../components/ContainedButton";
-import HomeCategoriesSection from "../../components/HomeCategoriesSection";
-import SearchBar from "../../components/SearchBar";
+import { HomeCategoriesSection } from "../../components/HomeCategoriesSection";
+import { SearchBar } from "../../components/SearchBar";
+import { SeedingWarningAlert } from "../../components/SeedingWarningAlert";
 import { getAllMemes } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
 
@@ -35,6 +36,7 @@ export const HomePage = () => {
   }, [supabaseClient]);
   return (
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
+      <SeedingWarningAlert />
       <Box display={"flex"}>
         <SearchBar />
         <ContainedButton

@@ -3,7 +3,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useTheme } from "../../contexts/theme";
 
-export default function SupaBaseApp() {
+export function LoginInButton() {
   const { supabaseClient } = useSessionContext();
 
   const { theme } = useTheme();

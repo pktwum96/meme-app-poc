@@ -9,7 +9,7 @@ import { HighlightMatchTextRenderer } from "./HighlightMatchTextRenderer";
 
 const filter = createFilterOptions<string>();
 
-export default function TagsSelector({
+export function TagsSelector({
   tags,
   setTags,
 }: {

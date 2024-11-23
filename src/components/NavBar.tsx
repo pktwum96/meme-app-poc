@@ -23,7 +23,7 @@ import { isReviewer } from "../helpers/utils";
 import { useUser } from "../supabase/useUser";
 import { ContainedButton } from "./ContainedButton";
 
-function NavBar() {
+export function NavBar() {
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -43,8 +43,8 @@ function NavBar() {
     {
       title: "Logout",
       action: async () => {
-        const logout = await supabaseClient.auth.signOut();
-        if (!logout.error) navigate("/login");
+        const { error } = await supabaseClient.auth.signOut();
+        if (!error) navigate("/login");
       },
     },
   ];
@@ -164,4 +164,3 @@ function NavBar() {
     </AppBar>
   );
 }
-export default NavBar;

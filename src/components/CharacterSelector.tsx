@@ -41,10 +41,10 @@ const emptyCharacter = {
   profile_url: null,
   name: ``,
 };
-export default function CharacterSelector({
+export const CharacterSelector = ({
   selectedCharacters,
   setSelectedCharacters,
-}: CharacterSelectorProps) {
+}: CharacterSelectorProps) => {
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<Character[]>([]);
   const [loading, setLoading] = useState(false);
@@ -227,4 +227,4 @@ export default function CharacterSelector({
       </Dialog>
     </>
   );
-}
+};

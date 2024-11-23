@@ -14,13 +14,13 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import CharacterSelector from "../../components/CharacterSelector";
+import { CharacterSelector } from "../../components/CharacterSelector";
 import { ContainedButton } from "../../components/ContainedButton";
-import FileUploadArea from "../../components/FileUploadArea";
-import LanguageSelector from "../../components/LanguageSelector";
+import { FileUploadArea } from "../../components/FileUploadArea";
+import { LanguageSelector } from "../../components/LanguageSelector";
 import { MediaRenderer } from "../../components/MediaRenderer";
-import TagsSelector from "../../components/TagsSelector";
-import Text from "../../components/Text";
+import { TagsSelector } from "../../components/TagsSelector";
+import { Text } from "../../components/Text";
 import { useFullScreenLoading } from "../../contexts/loading";
 import {
   createOrUpdateMemeInDatabase,

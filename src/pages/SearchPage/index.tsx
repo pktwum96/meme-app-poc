@@ -11,9 +11,10 @@ import {
 import Container from "@mui/material/Container";
 import { ChangeEvent, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import SearchBar from "../../components/SearchBar";
+import { SearchBar } from "../../components/SearchBar";
 
-import MemeList from "../../components/MemeList";
+import { MemeList } from "../../components/MemeList";
+import { SeedingWarningAlert } from "../../components/SeedingWarningAlert";
 // import { Meme } from "../../supabase/types";
 
 export const SearchPage = () => {
@@ -61,6 +62,7 @@ export const SearchPage = () => {
 
   return (
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
+      <SeedingWarningAlert />
       <Box display={"flex"}>
         <SearchBar
           rounded={false}

@@ -3,12 +3,12 @@ import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import { LoadingProvider } from "./contexts/loading/LoadingProvider";
 import { ThemeProvider } from "./contexts/theme/theme-provider";
-import ToasterProvider from "./contexts/toast";
+import { ToasterProvider } from "./contexts/toast";
 import { Root } from "./routes/Root";
-import SupabaseProvider from "./supabase/SupabaseProvider";
+import { SupabaseProvider } from "./supabase/SupabaseProvider";
 import { UserProvider } from "./supabase/user-provider";
 
-const App = () => {
+export const App = () => {
   return (
     <ThemeProvider>
       <CssBaseline />
@@ -25,5 +25,3 @@ const App = () => {
     </ThemeProvider>
   );
 };
-
-export default App;

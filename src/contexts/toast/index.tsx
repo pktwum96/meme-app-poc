@@ -1,7 +1,5 @@
 import { Toaster } from "react-hot-toast";
 
-const ToasterProvider = () => {
+export const ToasterProvider = () => {
   return <Toaster position="bottom-center" />;
 };
-
-export default ToasterProvider;

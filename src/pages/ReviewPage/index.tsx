@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MediaRenderer } from "../../components/MediaRenderer";
 import { StatusChip } from "../../components/StatusChip";
-import Text from "../../components/Text";
+import { Text } from "../../components/Text";
 import {
   approveMeme,
   getAllMyMemesInReview,

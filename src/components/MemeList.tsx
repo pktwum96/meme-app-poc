@@ -1,8 +1,8 @@
 import Grid from "@mui/material/Grid";
 import { Meme } from "../supabase/types";
-import MemeCard from "./MemeCard";
+import { MemeCard } from "./MemeCard";
 
-function MemeList({ memes }: { memes: Meme[] }) {
+export function MemeList({ memes }: { memes: Meme[] }) {
   return (
     <Grid container spacing={2}>
       {memes.map((meme, index) => (
@@ -20,5 +20,3 @@ function MemeList({ memes }: { memes: Meme[] }) {
     </Grid>
   );
 }
-
-export default MemeList;

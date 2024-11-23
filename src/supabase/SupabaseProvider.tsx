@@ -12,12 +12,10 @@ const client = createClient<Database>(
   import.meta.env.VITE_SUPABASE_KEY || "fasdf"
 );
 
-const SupabaseProvider: FC<SupabaseProviderProps> = ({ children }) => {
+export const SupabaseProvider: FC<SupabaseProviderProps> = ({ children }) => {
   return (
     <SessionContextProvider supabaseClient={client}>
       {children}
     </SessionContextProvider>
   );
 };
-
-export default SupabaseProvider;

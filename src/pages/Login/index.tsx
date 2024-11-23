@@ -1,9 +1,9 @@
 import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Text from "../../components/Text";
+import { Text } from "../../components/Text";
 import { usePageTitle } from "../../helpers/utils";
-import LoginInButton from "./LoginButton";
+import { LoginInButton } from "./LoginButton";
 
 export const Login = () => {
   usePageTitle("Login");

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Meme } from "../supabase/types";
 import { MediaRenderer } from "./MediaRenderer";
 
-function MemeCard(meme: Meme) {
+export const MemeCard = (meme: Meme) => {
   const navigate = useNavigate();
   const onCardClick = () => {
     navigate(`/meme/${meme.id}`, { state: { meme } });
@@ -62,6 +62,4 @@ function MemeCard(meme: Meme) {
       </Card>
     </CardActionArea>
   );
-}
-
-export default MemeCard;
+};

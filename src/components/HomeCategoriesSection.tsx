@@ -2,9 +2,9 @@ import { Box, Link, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import { Meme } from "../supabase/types";
-import MemeList from "./MemeList";
+import { MemeList } from "./MemeList";
 
-function HomeCategoriesSection({
+export function HomeCategoriesSection({
   sectionTitle,
   memeList,
 }: {
@@ -44,5 +44,3 @@ function HomeCategoriesSection({
     </Box>
   );
 }
-
-export default HomeCategoriesSection;

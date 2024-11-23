@@ -1,6 +1,6 @@
 import { LinkProps, Link as RouterLink } from "react-router-dom";
 
-const Link = (props: LinkProps) => {
+export const Link = (props: LinkProps) => {
   return (
     <RouterLink
       className="link-component"
@@ -9,5 +9,3 @@ const Link = (props: LinkProps) => {
     />
   );
 };
-
-export default Link;

@@ -11,7 +11,7 @@ interface LanguageSelectorProps {
   selectedLanguages: string[];
   setSelectedLanguages: Dispatch<SetStateAction<string[]>>;
 }
-export default function LanguageSelector({
+export function LanguageSelector({
   selectedLanguages,
   setSelectedLanguages,
 }: LanguageSelectorProps) {

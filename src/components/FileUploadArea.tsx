@@ -1,7 +1,7 @@
 import { isString } from "lodash";
 import { ChangeEvent, Dispatch, DragEvent, useState } from "react";
 
-const FileUploadArea = ({
+export const FileUploadArea = ({
   selectedFile,
   setSelectedFile,
 }: {
@@ -72,5 +72,3 @@ const FileUploadArea = ({
     </div>
   );
 };
-
-export default FileUploadArea;
