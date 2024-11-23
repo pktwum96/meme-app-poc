@@ -1,30 +1,20 @@
-# React + TypeScript + Vite
+# 🌍 The Meme Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the Meme Finder! This project is a platform for discovering, sharing, and reviewing Ghanaian/African memes.
 
-Currently, two official plugins are available:
+## 🚀 Live App URL
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The live version of the application is now available! You can access it here:
 
-## Expanding the ESLint configuration
+[The Meme Finder - Live App](https://thememefinder.com/)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 🌟 Key Features
 
-- Configure the top-level `parserOptions` property like this:
+- Explore a growing collection of African memes.
+- Upload your favorite memes for review and sharing.
+- A review process ensures high-quality, culturally relevant content.
+- Browse memes by tags, categories, and languages.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## 🛠️ Running Locally (Optional)
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+If you’d like to run the app locally, please follow the setup instructions in the Installation section of this repository.

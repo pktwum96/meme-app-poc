@@ -4,7 +4,7 @@ import { Meme, UserDetails } from "../supabase/types";
 
 export const usePageTitle = (title: string) => {
   useEffect(() => {
-    document.title = `${title} || MidToSenior`;
+    document.title = `${title} || The Meme Finder`;
   }, [title]);
 };
 
