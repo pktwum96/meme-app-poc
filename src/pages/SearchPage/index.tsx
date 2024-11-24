@@ -13,7 +13,7 @@ import { searchMemes } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
 
 export const SearchPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [query, setQuery] = useState(searchParams.get("query") || "");
 
@@ -35,13 +35,13 @@ export const SearchPage = () => {
       }
     };
     fetchMemes();
-  }, [query]);
+  }, [query, supabaseClient]);
 
-  const applyFilters = () => {
-    const newQueryParameters: URLSearchParams = new URLSearchParams();
-    newQueryParameters.set("query", query);
-    setSearchParams(newQueryParameters);
-  };
+  // const applyFilters = () => {
+  //   const newQueryParameters: URLSearchParams = new URLSearchParams();
+  //   newQueryParameters.set("query", query);
+  //   setSearchParams(newQueryParameters);
+  // };
 
   if (!memes) {
     return "Loading";
