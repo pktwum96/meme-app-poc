@@ -101,6 +101,7 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithAssociations }) => {
       created_at: null,
       tags,
       characters: selectedCharacters,
+      published_at: null,
     };
 
     const { data, error } = await createOrUpdateMemeInDatabase(supabase, {
