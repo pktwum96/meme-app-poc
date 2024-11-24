@@ -2,47 +2,48 @@ import SearchIcon from "@mui/icons-material/Search";
 import { IconButton, InputAdornment } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { ChangeEvent, ChangeEventHandler, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function SearchBar({
-  value,
-  setValue,
   onSubmit,
+  defaultValue,
 }: {
-  rounded?: boolean;
-  value?: string;
-  setValue?: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
-  onSubmit?: () => void;
+  defaultValue?: string;
+  onSubmit?: (query: string) => void;
 }) {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(defaultValue || "");
 
   const navigate = useNavigate();
-  const onClickSubmit = () => {
-    navigate(`/search?query=${searchQuery}`);
+
+  const onSearch = () => {
+    if (onSubmit) {
+      onSubmit(searchQuery);
+    } else {
+      navigate(`/search?query=${searchQuery}`);
+    }
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  setValue;
   return (
     <Autocomplete
       id="main-search"
       freeSolo
-      onSubmit={onSubmit || onClickSubmit}
-      defaultValue={value}
-      value={value}
+      onSubmit={onSearch}
+      defaultValue={defaultValue}
+      value={searchQuery}
       options={[]}
       sx={{ flex: 1, flexGrow: 1 }}
       renderInput={(params) => (
         <TextField
           {...params}
           placeholder="Search Meme"
-          onSubmit={onSubmit}
-          value={value || searchQuery}
-          onChange={setValue || onChange}
+          onSubmit={onSearch}
+          value={searchQuery}
+          onChange={onChange}
           InputProps={{
             ...params.InputProps,
             type: "search",
@@ -51,7 +52,7 @@ export function SearchBar({
             },
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={onSubmit || onClickSubmit}>
+                <IconButton onClick={onSearch}>
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>

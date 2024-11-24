@@ -29,6 +29,7 @@ import { useTheme } from "../../contexts/theme";
 import {
   isMemeDraft,
   isMemeRejected,
+  normalizeMemeTags,
   retrieveLanguageFromList,
 } from "../../helpers/utils";
 import {
@@ -36,7 +37,7 @@ import {
   getMemeById,
   submitMemeForReview,
 } from "../../queries/memes";
-import { MemeWithTags } from "../../supabase/types";
+import { MemeWithAssociations } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
 export const MemeInfoPage = () => {
@@ -46,7 +47,9 @@ export const MemeInfoPage = () => {
   const { userDetails } = useUser();
 
   const stateMeme = state?.meme;
-  const [meme, setMeme] = useState<MemeWithTags | undefined>(stateMeme);
+  const [meme, setMeme] = useState<MemeWithAssociations | undefined>(stateMeme);
+
+  console.log(meme);
   const { supabaseClient } = useSessionContext();
   const { setIsLoading } = useFullScreenLoading();
 
@@ -73,10 +76,7 @@ export const MemeInfoPage = () => {
           }
 
           if (data) {
-            const memeData = {
-              ...data,
-              tags: data.tags.map((tag: { name: string }) => tag.name),
-            };
+            const memeData = normalizeMemeTags(data);
             setMeme(memeData);
           }
         }

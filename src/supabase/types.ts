@@ -1,3 +1,4 @@
+import { getMemeById } from "../queries/memes.ts";
 import { Tables, TablesInsert, TablesUpdate } from "./database.types.ts";
 
 // Row Data
@@ -7,10 +8,14 @@ export type Meme = Tables<"memes">;
 export type Review = Tables<"reviews">;
 export type Character = Tables<"characters">;
 
-export type MemeWithTags = Tables<"memes"> & {
+export type MemeWithAssociations = Tables<"memes"> & {
   tags: string[];
   characters: Character[];
 };
+
+export type RawMemeWithAssociations = NonNullable<
+  Awaited<ReturnType<typeof getMemeById>>["data"]
+>;
 
 // Insert Data
 export type UserDetailsInsert = TablesInsert<"users">;

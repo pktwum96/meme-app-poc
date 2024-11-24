@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { languages } from "../assets/data/languages";
-import { Meme, UserDetails } from "../supabase/types";
+import { Meme, RawMemeWithAssociations, UserDetails } from "../supabase/types";
 
 export const usePageTitle = (title: string) => {
   useEffect(() => {
@@ -26,4 +26,11 @@ export const isMemeInReview = (meme: Meme) => {
 
 export const retrieveLanguageFromList = (code: string) => {
   return languages.find((lang) => lang.code === code);
+};
+
+export const normalizeMemeTags = (meme: RawMemeWithAssociations) => {
+  return {
+    ...meme,
+    tags: meme.tags.map((tag: { name: string }) => tag.name),
+  };
 };

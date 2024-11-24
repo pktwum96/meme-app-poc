@@ -1,9 +1,17 @@
 import { SupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "../supabase/database.types";
-import { Meme, MemeUpdate, MemeWithTags } from "../supabase/types";
+import { Meme, MemeUpdate, MemeWithAssociations } from "../supabase/types";
 
 export const getAllMemes = (client: SupabaseClient<Database>) => {
-  return client.from("memes").select("*").eq("status", "published");
+  return client
+    .from("memes")
+    .select(
+      `*,
+    tags (name),
+    characters (*)`
+    )
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
 };
 
 export const getMemeById = (
@@ -25,7 +33,28 @@ export const getAllMyMemes = (
   client: SupabaseClient<Database>,
   userId: string
 ) => {
-  return client.from("memes").select("*").eq("created_by", userId);
+  return client
+    .from("memes")
+    .select("*")
+    .eq("created_by", userId)
+    .order("created_at", { ascending: false });
+};
+
+export const searchMemes = (
+  client: SupabaseClient<Database>,
+  queryString: string
+) => {
+  return client
+    .from("memes")
+    .select(
+      `*,
+      tags (name),
+      characters (*)`
+    )
+    .or(
+      `description.ilike.%${queryString}%,languages.cs."{${queryString}}",media_type.ilike.%${queryString}%,title.ilike.%${queryString}%`
+    )
+    .order("published_at", { ascending: false });
 };
 
 export const getAllMyMemesInReview = (
@@ -51,7 +80,7 @@ export const uploadMemeToSupabase = (
 
 export const createOrUpdateMemeInDatabase = (
   client: SupabaseClient<Database>,
-  meme: Omit<MemeWithTags, "id"> & { id?: string }
+  meme: Omit<MemeWithAssociations, "id"> & { id?: string }
 ) => {
   return client
     .rpc("insert_or_update_meme_v4", {
@@ -96,6 +125,7 @@ export const approveMeme = (client: SupabaseClient<Database>, meme: Meme) => {
     .from("memes")
     .update({
       status: "published",
+      published_at: new Date().toISOString(),
     })
     .eq("id", meme.id)
     .select("*")

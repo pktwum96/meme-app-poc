@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useParams } from "react-router-dom";
 import { useFullScreenLoading } from "../../contexts/loading";
+import { normalizeMemeTags } from "../../helpers/utils";
 import { getMemeById } from "../../queries/memes";
-import { MemeWithTags } from "../../supabase/types";
+import { MemeWithAssociations } from "../../supabase/types";
 import { CreateMemePage } from "../CreateMemePage";
 
 export const EditMemePage = () => {
@@ -12,7 +13,7 @@ export const EditMemePage = () => {
   const state = useLocation().state;
 
   const stateMeme = state?.meme;
-  const [meme, setMeme] = useState<MemeWithTags | undefined>(stateMeme);
+  const [meme, setMeme] = useState<MemeWithAssociations | undefined>(stateMeme);
   const { supabaseClient } = useSessionContext();
   const { setIsLoading } = useFullScreenLoading();
 
@@ -27,10 +28,7 @@ export const EditMemePage = () => {
             throw new Error(error.message);
           }
           if (data) {
-            const memeData = {
-              ...data,
-              tags: data.tags.map((tag: { name: string }) => tag.name),
-            };
+            const memeData = normalizeMemeTags(data);
             setMeme(memeData);
           }
         }

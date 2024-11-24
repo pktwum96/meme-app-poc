@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import { getAllMemes } from "../../../queries/memes";
-import { Meme } from "../../../supabase/types";
+import { RawMemeWithAssociations } from "../../../supabase/types";
 import { HomePage } from "../index";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
@@ -61,14 +61,22 @@ describe("HomePage", () => {
         title: "Test Meme",
         media_url: "test.jpg",
         media_type: "image",
+        created_by: "me",
+        description: "",
+        languages: [],
+        media_path: "",
+        status: "draft",
         created_at: new Date().toISOString(),
-      } as Meme,
+        tags: [],
+        characters: [],
+        published_at: new Date().toISOString(),
+      } as RawMemeWithAssociations,
     ];
 
     vi.mocked(getAllMemes).mockResolvedValueOnce({
       data: mockMemes,
       error: null,
-    } as PostgrestResponse<Meme>);
+    } as PostgrestResponse<RawMemeWithAssociations>);
 
     render(
       <BrowserRouter>
@@ -111,9 +119,9 @@ describe("HomePage", () => {
 
   it("renders empty state when no memes are returned", async () => {
     vi.mocked(getAllMemes).mockResolvedValueOnce({
-      data: [] as Meme[],
+      data: [] as RawMemeWithAssociations[],
       error: null,
-    } as PostgrestResponse<Meme>);
+    } as PostgrestResponse<RawMemeWithAssociations>);
 
     render(
       <BrowserRouter>

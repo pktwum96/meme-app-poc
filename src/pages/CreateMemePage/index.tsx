@@ -26,10 +26,10 @@ import {
   createOrUpdateMemeInDatabase,
   uploadMemeToSupabase,
 } from "../../queries/memes";
-import { Meme, MemeWithTags } from "../../supabase/types";
+import { Meme, MemeWithAssociations } from "../../supabase/types";
 import { useUser } from "../../supabase/useUser";
 
-export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
+export const CreateMemePage = ({ meme }: { meme?: MemeWithAssociations }) => {
   const [selectedFile, setSelectedFile] = useState<File | string | undefined>(
     meme?.media_url
   );
@@ -112,8 +112,11 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithTags }) => {
     return data;
   };
 
-  const updateExistingMeme = async (meme: MemeWithTags, file?: File) => {
-    const updatedInfo: MemeWithTags = {
+  const updateExistingMeme = async (
+    meme: MemeWithAssociations,
+    file?: File
+  ) => {
+    const updatedInfo: MemeWithAssociations = {
       ...meme,
       id: meme.id,
       title,
