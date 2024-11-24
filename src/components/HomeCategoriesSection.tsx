@@ -1,6 +1,7 @@
-import { Box, Link, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
-
 import { Meme } from "../supabase/types";
 import { MemeList } from "./MemeList";
 

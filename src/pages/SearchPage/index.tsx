@@ -1,9 +1,9 @@
-import { Box } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SearchBar } from "../../components/SearchBar";
 
+import Box from "@mui/material/Box";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { MemeList } from "../../components/MemeList";
 import { NoMemesFoundBox } from "../../components/NoMemesFoundBox";

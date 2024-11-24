@@ -1,4 +1,4 @@
-import { Skeleton } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 import { TypographyProps } from "@mui/material/Typography";
 import { Text } from "./Text";
 

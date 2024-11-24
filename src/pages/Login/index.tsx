@@ -1,6 +1,6 @@
-import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
 import { Text } from "../../components/Text";
 import { usePageTitle } from "../../helpers/utils";
 import { LoginInButton } from "./LoginButton";
