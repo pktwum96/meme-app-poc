@@ -39,6 +39,7 @@ export const SearchPage = () => {
 
       if (error) {
         console.error(error);
+        setMemes([]);
         return [];
       }
 

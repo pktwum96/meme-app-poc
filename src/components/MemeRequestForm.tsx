@@ -1,22 +1,16 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { ContainedButton } from "./ContainedButton";
 
 export const MemeRequestForm = () => {
   const [memeTitle, setMemeTitle] = useState("");
   const [memeDetails, setMemeDetails] = useState("");
 
-  const handleSubmit = () => {
-    setMemeTitle("");
-    setMemeDetails("");
-  };
-
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit}
       method="POST"
       data-netlify="true"
       name="Meme Upload Requests"
@@ -51,9 +45,9 @@ export const MemeRequestForm = () => {
         onChange={(e) => setMemeDetails(e.target.value)}
       />
 
-      <Button type="submit" variant="contained" color="primary" fullWidth>
+      <ContainedButton type="submit" fullWidth>
         Submit Request
-      </Button>
+      </ContainedButton>
     </Box>
   );
 };
