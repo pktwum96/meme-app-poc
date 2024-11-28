@@ -1,0 +1,8 @@
+# robots.txt for The Meme Finder
+
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /user-dashboard/
+Disallow: /private/
+Allow: /

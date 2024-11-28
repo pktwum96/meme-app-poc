@@ -33,7 +33,6 @@ export const SearchPage = () => {
   const { supabaseClient } = useSessionContext();
   useEffect(() => {
     const fetchMemes = async () => {
-      console.table(tags);
       const { data, error } = await searchMemes(supabaseClient, query, {
         tags,
       });

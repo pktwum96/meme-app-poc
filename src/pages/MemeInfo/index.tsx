@@ -49,7 +49,6 @@ export const MemeInfoPage = () => {
   const stateMeme = state?.meme;
   const [meme, setMeme] = useState<MemeWithAssociations | undefined>(stateMeme);
 
-  console.log(meme);
   const { supabaseClient } = useSessionContext();
   const { setIsLoading } = useFullScreenLoading();
 

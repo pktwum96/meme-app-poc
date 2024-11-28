@@ -53,7 +53,7 @@ export function SearchBar({
             },
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={onSearch}>
+                <IconButton aria-label="Search memes button" onClick={onSearch}>
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>

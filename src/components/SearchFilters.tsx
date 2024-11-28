@@ -15,8 +15,6 @@ export const SearchFilters = () => {
   const [tags, setTags] = useState(searchParams.getAll("tag") || []);
   const [selectedLanguages] = useState(searchParams.getAll("lang") || []);
 
-  console.log(tags);
-
   const onApplyFilter = () => {
     const newParams = new URLSearchParams();
 
