@@ -8,13 +8,13 @@ export const getUserDetails = (
   return client.from("users").select("*").eq("id", userId).single();
 };
 
-export const getUserPreferences = (
-  client: SupabaseClient<Database>,
-  userId: string
-) => {
-  return client
-    .from("user_preferences")
-    .select("*")
-    .eq("user_id", userId)
-    .single();
-};
+// export const getUserPreferences = (
+//   client: SupabaseClient<Database>,
+//   userId: string
+// ) => {
+//   return client
+//     .from("user_preferences")
+//     .select("*")
+//     .eq("user_id", userId)
+//     .single();
+// };

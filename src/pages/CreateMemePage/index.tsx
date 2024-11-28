@@ -201,7 +201,7 @@ export const CreateMemePage = ({ meme }: { meme?: MemeWithAssociations }) => {
       <Text variant="h3" textAlign={"center"}>
         Upload your meme
       </Text>
-      <Box role="form" component="form" paddingTop={2}>
+      <Box component="form" paddingTop={2}>
         <Stack spacing={2}>
           {fileURLForRender ? (
             <Box position={"relative"}>

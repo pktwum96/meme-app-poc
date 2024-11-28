@@ -20,9 +20,9 @@ export const isMemeRejected = (meme: Meme) => {
   return meme.status === "rejected";
 };
 
-export const isMemeInReview = (meme: Meme) => {
-  return meme.status === "review";
-};
+// export const isMemeInReview = (meme: Meme) => {
+//   return meme.status === "review";
+// };
 
 export const retrieveLanguageFromList = (code: string) => {
   return languages.find((lang) => lang.code === code);
