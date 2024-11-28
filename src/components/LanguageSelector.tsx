@@ -25,7 +25,7 @@ export function LanguageSelector({
   >([]);
 
   useEffect(() => {
-    const formattedSelected = selectedLanguages.map((selected) => {
+    const formattedSelected = (selectedLanguages || []).map((selected) => {
       return (
         retrieveLanguageFromList(selected) || { code: selected, name: selected }
       );

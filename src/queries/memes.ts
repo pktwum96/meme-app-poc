@@ -42,19 +42,48 @@ export const getAllMyMemes = (
 
 export const searchMemes = (
   client: SupabaseClient<Database>,
-  queryString: string
+  queryString: string,
+  filter: {
+    mediaType?: string;
+    tags?: string[];
+    characters?: string[];
+  }
 ) => {
-  return client
+  const { mediaType, tags, characters } = filter;
+  let query = client
     .from("memes")
     .select(
       `*,
       tags (name),
       characters (*)`
     )
+
+    .eq("status", "published")
+    .filter("description", "ilike", `%${queryString}%`)
     .or(
-      `description.ilike.%${queryString}%,languages.cs."{${queryString}}",media_type.ilike.%${queryString}%,title.ilike.%${queryString}%`
-    )
-    .order("published_at", { ascending: false });
+      `languages.cs.{${queryString}}, media_type.ilike.%${queryString}%, title.ilike.%${queryString}%`
+    );
+
+  if (mediaType) {
+    query = query.eq("media_type", mediaType);
+  }
+
+  // Add tags filter
+  if (tags?.length) {
+    query = query.contains(
+      "tags",
+      tags.map((tag) => ({ name: tag }))
+    );
+  }
+
+  // Add characters filter
+  if (characters?.length) {
+    query = query.contains(
+      "characters",
+      characters.map((char) => ({ name: char }))
+    );
+  }
+  return query.order("published_at", { ascending: true });
 };
 
 export const getAllMyMemesInReview = (

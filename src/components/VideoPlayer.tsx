@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { alpha } from "@mui/material/styles";
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import { useTheme } from "../contexts/theme";
 
 export const VideoPlayer = ({ src }: { src: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -60,7 +59,6 @@ export const VideoPlayer = ({ src }: { src: string }) => {
     }
   };
 
-  const { theme } = useTheme();
   return (
     <Box
       position={"relative"}
@@ -85,18 +83,22 @@ export const VideoPlayer = ({ src }: { src: string }) => {
           display={"flex"}
           alignItems={"center"}
           justifyContent={"center"}
-          bgcolor={
-            isPlaying
-              ? undefined
-              : alpha(theme.palette.mode === "dark" ? "#000" : "#fff", 0.3)
-          }
+          bgcolor={isPlaying ? undefined : alpha("#000", 0.3)}
         >
           {isPlaying ? (
-            <IconButton onClick={handlePause} component={"span"}>
+            <IconButton
+              aria-label="Pause Button"
+              onClick={handlePause}
+              component={"span"}
+            >
               <PauseCircleFilled sx={{ fontSize: iconSize }} />
             </IconButton>
           ) : (
-            <IconButton onClick={handlePlay} component={"span"}>
+            <IconButton
+              aria-label="Play Button"
+              onClick={handlePlay}
+              component={"span"}
+            >
               <PlayCircleFilledOutlined sx={{ fontSize: iconSize }} />
             </IconButton>
           )}

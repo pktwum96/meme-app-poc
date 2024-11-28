@@ -142,14 +142,11 @@ export const MemeInfoPage = () => {
   return (
     <Container sx={{ paddingY: 3 }}>
       <Card sx={{ p: "1.5rem" }}>
-        {isCreatedByUser ? (
-          <Stack
-            direction={{ xs: "column", md: "row" }}
-            paddingBottom={"1.5rem"}
-          >
-            <Text fontWeight={theme.typography.fontWeightBold} variant="h5">
-              {meme?.title}
-            </Text>
+        <Stack direction={{ xs: "column", md: "row" }} paddingBottom={"1.5rem"}>
+          <Text fontWeight={theme.typography.fontWeightBold} variant="h5">
+            {meme?.title}
+          </Text>
+          {isCreatedByUser ? (
             <Stack
               direction="row"
               alignItems={"center"}
@@ -184,9 +181,8 @@ export const MemeInfoPage = () => {
                 </Stack>
               ) : null}
             </Stack>
-          </Stack>
-        ) : null}
-
+          ) : null}
+        </Stack>
         <MediaRenderer
           alt={meme.title}
           type={meme.media_type!}
@@ -195,7 +191,6 @@ export const MemeInfoPage = () => {
         <Text sx={{ paddingY: "1rem" }} variant="body1">
           {meme?.description}
         </Text>
-
         {meme.tags?.length ? (
           <Stack paddingBottom={"1rem"} direction={"row"}>
             {meme.tags?.map((tag) => {
@@ -205,9 +200,7 @@ export const MemeInfoPage = () => {
             })}
           </Stack>
         ) : null}
-
         <Divider />
-
         <Stack
           py={1}
           gap={{ me: 4, xs: 1 }}
@@ -241,7 +234,6 @@ export const MemeInfoPage = () => {
             </Box>
           ) : null}
         </Stack>
-
         {isCreatedByUser && meme.status === "draft" ? (
           <Box padding={2} display={"flex"}>
             <ContainedButton

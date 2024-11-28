@@ -8,6 +8,7 @@ import { ContainedButton } from "../../components/ContainedButton";
 import { HomeCategoriesSection } from "../../components/HomeCategoriesSection";
 import { SearchBar } from "../../components/SearchBar";
 import { SeedingWarningAlert } from "../../components/SeedingWarningAlert";
+import { normalizeMemeTags } from "../../helpers/utils";
 import { getAllMemes } from "../../queries/memes";
 import { Meme } from "../../supabase/types";
 
@@ -26,7 +27,8 @@ export const HomePage = () => {
           throw error;
         }
         if (data) {
-          setMemeList(data);
+          const memeData = data.map((meme) => normalizeMemeTags(meme));
+          setMemeList(memeData);
         }
       } catch (error) {
         toast.error((error as Error).message);

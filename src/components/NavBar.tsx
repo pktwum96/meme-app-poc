@@ -64,6 +64,7 @@ export function NavBar() {
           >
             <Box
               component={"img"}
+              alt="The Meme Finder Logo"
               sx={{ height: "100%", padding: 2 }}
               src={theme.palette.mode === "dark" ? LogoDark : Logo}
               onClick={() => {
@@ -83,6 +84,7 @@ export function NavBar() {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <IconButton
+              aria-label="theme switcher"
               onClick={() => {
                 setTheme(
                   theme.palette.mode === "dark" ? lightTheme : darkTheme
