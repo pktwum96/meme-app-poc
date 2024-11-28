@@ -22,8 +22,6 @@ export const RequestMemePage = () => {
           gap: 2,
         }}
       >
-        {/* Hidden input for Netlify to identify the form */}
-        <input type="hidden" name="form-name" value="Meme Upload Requests" />
         <Typography variant="h6" gutterBottom>
           Request a Meme Upload
         </Typography>
