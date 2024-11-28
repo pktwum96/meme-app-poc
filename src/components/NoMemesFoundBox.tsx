@@ -2,18 +2,13 @@ import Card from "@mui/material/Card";
 
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ContainedButton } from "./ContainedButton";
-import { MemeRequestForm } from "./MemeRequestForm";
 import { Text } from "./Text";
 
 export const NoMemesFoundBox = () => {
   const navigate = useNavigate();
 
-  const [requestDialogOpen, setRequestDialogOpen] = useState(false);
   return (
     <Card sx={{ p: 3 }}>
       <CardContent>
@@ -45,24 +40,11 @@ export const NoMemesFoundBox = () => {
         <ContainedButton
           size="small"
           color="primary"
-          onClick={() => {
-            setRequestDialogOpen(true);
-          }}
+          onClick={() => navigate("/meme/request")}
         >
           Request it
         </ContainedButton>
       </CardActions>
-
-      <Dialog
-        open={requestDialogOpen}
-        onClose={() => {
-          setRequestDialogOpen(false);
-        }}
-      >
-        <DialogContent>
-          <MemeRequestForm />
-        </DialogContent>
-      </Dialog>
     </Card>
   );
 };

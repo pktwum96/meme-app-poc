@@ -7,6 +7,7 @@ import { HomePage } from "../pages/Home";
 import { Login } from "../pages/Login";
 import { MemeInfoPage } from "../pages/MemeInfo";
 import { MyMemes } from "../pages/MyMemes";
+import { RequestMemePage } from "../pages/RequestMemePage";
 import { ReviewPage } from "../pages/ReviewPage";
 import { SearchPage } from "../pages/SearchPage";
 import { RequireAuth } from "./helpers/RequireAuth";
@@ -29,6 +30,7 @@ export const Root = () => {
 
             <Route path="/meme">
               <Route path="create" element={<CreateMemePage />} />
+              <Route path="request" element={<RequestMemePage />} />
               <Route path=":memeId" element={<MemeInfoPage />} />
               <Route path=":memeId/edit" element={<EditMemePage />} />
               <Route path=":memeId/:slugId" element={<MemeInfoPage />} />
