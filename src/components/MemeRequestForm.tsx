@@ -34,6 +34,7 @@ export const MemeRequestForm = () => {
         label="Meme Title or Description"
         variant="outlined"
         fullWidth
+        name="Meme Title"
         required
         value={memeTitle}
         onChange={(e) => setMemeTitle(e.target.value)}
@@ -44,6 +45,7 @@ export const MemeRequestForm = () => {
         variant="outlined"
         fullWidth
         multiline
+        name="Additional Details"
         rows={4}
         value={memeDetails}
         onChange={(e) => setMemeDetails(e.target.value)}
