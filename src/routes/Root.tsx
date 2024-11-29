@@ -24,13 +24,13 @@ export const Root = () => {
           <Route index element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/meme/request" element={<RequestMemePage />} />
 
           <Route element={<RequireAuth />}>
             <Route path="/my-memes" element={<MyMemes />} />
 
             <Route path="/meme">
               <Route path="create" element={<CreateMemePage />} />
-              <Route path="request" element={<RequestMemePage />} />
               <Route path=":memeId" element={<MemeInfoPage />} />
               <Route path=":memeId/edit" element={<EditMemePage />} />
               <Route path=":memeId/:slugId" element={<MemeInfoPage />} />
