@@ -12,7 +12,7 @@ export const RequestMemePage = () => {
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
       <form
         method="POST"
-        data-netlify={true}
+        data-netlify
         name="Meme Upload Requests"
         style={{
           display: "flex",
@@ -30,6 +30,7 @@ export const RequestMemePage = () => {
           fullWidth
           name="Meme Title"
           required
+          type="text"
           value={memeTitle}
           onChange={(e) => setMemeTitle(e.target.value)}
         />
@@ -39,6 +40,7 @@ export const RequestMemePage = () => {
           variant="outlined"
           fullWidth
           multiline
+          type="text"
           name="Additional Details"
           rows={4}
           value={memeDetails}
