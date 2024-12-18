@@ -12,15 +12,15 @@ export const RequestMemePage = () => {
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
       <form
         method="POST"
-        data-netlify
-        name="Meme Upload Requests"
+        data-netlify="true"
+        name="MemeUploadRequests"
         style={{
           display: "flex",
           flexDirection: "column",
           gap: 2,
         }}
       >
-        <input type="hidden" name="form-name" value="Meme Upload Requests" />
+        <input type="hidden" name="form-name" value="MemeUploadRequests" />
         <Typography variant="h6" gutterBottom>
           Request a Meme Upload
         </Typography>
