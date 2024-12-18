@@ -14,7 +14,7 @@ export const RequestMemePage = () => {
       <Box
         component="form"
         method="POST"
-        data-netlify="true"
+        data-netlify={true}
         name="Meme Upload Requests"
         sx={{
           display: "flex",

@@ -11,7 +11,8 @@ export const getAllMemes = (client: SupabaseClient<Database>) => {
     characters (*)`
     )
     .eq("status", "published")
-    .order("published_at", { ascending: false });
+    .order("published_at", { ascending: false })
+    .range(0, 7);
 };
 
 export const getMemeById = (
