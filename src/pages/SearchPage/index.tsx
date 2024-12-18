@@ -49,6 +49,7 @@ export const SearchPage = () => {
       }
     };
     fetchMemes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, supabaseClient, JSON.stringify(tags)]);
 
   const applySort = (event: SelectChangeEvent) => {
