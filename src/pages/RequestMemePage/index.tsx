@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -11,12 +10,11 @@ export const RequestMemePage = () => {
 
   return (
     <Container maxWidth="xl" sx={{ paddingY: 4 }}>
-      <Box
-        component="form"
+      <form
         method="POST"
         data-netlify={true}
         name="Meme Upload Requests"
-        sx={{
+        style={{
           display: "flex",
           flexDirection: "column",
           gap: 2,
@@ -50,7 +48,7 @@ export const RequestMemePage = () => {
         <ContainedButton type="submit" fullWidth>
           Submit Request
         </ContainedButton>
-      </Box>
+      </form>
     </Container>
   );
 };
