@@ -6,6 +6,9 @@ export const darkTheme = createTheme({
     background: {
       paper: "#000000",
     },
+    primary: {
+      main: "#fffd",
+    },
   },
   typography: {
     fontFamily: "Geist",

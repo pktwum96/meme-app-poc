@@ -18,3 +18,5 @@ The live version of the application is now available! You can access it here:
 ## 🛠️ Running Locally (Optional)
 
 If you’d like to run the app locally, please follow the setup instructions in the Installation section of this repository.
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/73fb5116-04e6-4853-9fb3-2282ee985f6a/deploy-status)](https://app.netlify.com/sites/thememefinder/deploys)
